@@ -136,20 +136,20 @@
 <!-- Sign Up Form -->
 <div class="container" style="display: none;">
 
-<%--    <c:if test="${not empty message}">--%>
-<%--        <c:choose>--%>
-<%--            <c:when test="${hasError}">--%>
-<%--                <div class="alert alert-danger" role="alert">--%>
-<%--                        ${error}--%>
-<%--                </div>--%>
-<%--            </c:when>--%>
-<%--            <c:otherwise>--%>
-<%--                <div class="alert alert-success" role="alert">--%>
-<%--                        ${message}--%>
-<%--                </div>--%>
-<%--            </c:otherwise>--%>
-<%--        </c:choose>--%>
-<%--    </c:if>--%>
+    <c:if test="${not empty message}">
+        <c:choose>
+            <c:when test="${hasError}">
+                <div class="alert alert-danger" role="alert">
+                        ${error}
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="alert alert-success" role="alert">
+                        ${message}
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </c:if>
 
     <div class="row justify-content-md-center h-100">
         <div class="col-sm-12 col-md-4 my-auto">
