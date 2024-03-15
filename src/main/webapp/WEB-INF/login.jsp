@@ -7,78 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        body {
-            position: relative;
-            min-height: 100vh;
-        }
-        body::before {
-            content: "";
-            background-image: url("../Images/41_MUIC_campus.jpg");
-            background-repeat: no-repeat;
-            background-size: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            filter: blur(5px); /* Adjust the blur value as needed */
-            z-index: -1;
-        }
-
-        .container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.5); /* White with 70% opacity */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Shadow for better visibility */
-        }
-        .btn-primary {
-            background-color: #6a0dad;
-            border-color: #6a0dad;
-        }
-        .btn-primary:hover {
-            background-color: #550a8a;
-            border-color: #550a8a;
-        }
-
-        .logo-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 999;
-        }
-        .logo-container img {
-            width: 150px;
-            height: auto;
-        }
-        .form-title {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .form-title img {
-            width: 50px;
-            height: auto;
-            margin-right: 10px;
-        }
-
-
-        .webapp-logo {
-            display: flex;
-            align-items: center; /* Align items vertically */
-        }
-        .webapp-logo > div:first-child {
-            margin-right: 20px; /* Adjust margin as needed */
-        }
-        .webapp-logo img {
-            width: 80px;
-            height: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
             crossorigin="anonymous"></script>
