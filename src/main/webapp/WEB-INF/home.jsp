@@ -75,16 +75,16 @@
             <table class="table">
                 <tr>
                     <td><h3><strong>Groups</strong></h3></td>
-                    <td style="width: 15%;"> <a class="btn btn-gray" type="button" href="/" title="Join Groups"><i class="fa fa-plus"></i> &nbsp; </a></td>
-                    <td style="width: 15%;"> <a class="btn btn-gray" type="button" href="/" title="Edit Groups"><i class="fa fa-pencil"></i> &nbsp; </a></td>
+                    <td style="width: 7%;"> <a class="btn btn-gray" type="button" href="/" title="Join Groups"><i class="fa fa-plus"></i></a></td>
+                    <td style="width: 7%;"> <a class="btn btn-gray" type="button" href="/" title="Edit Groups"><i class="fa fa-pencil"></i></a></td>
                 </tr>
                 <tr style="height: 100px;">
                     <td style="vertical-align: middle;"><p>You're not in any groups! :(</p></td>
                 </tr>
                 <tr>
                     <td><h3><strong>Friends</strong></h3></td>
-                    <td style="width: 15%;"> <a class="btn btn-gray" type="button" href="/" title="Add Friends"><i class="fa fa-user-plus"></i> &nbsp; </a></td>
-                    <td style="width: 15%;"> <a class="btn btn-gray" type="button" href="/" title="Edit Friends"><i class="fa fa-pencil"></i> &nbsp; </a></td>
+                    <td style="width: 7%;"> <a class="btn btn-gray" type="button" href="/" title="Add Friends"><i class="fa fa-user-plus"></i></a></td>
+                    <td style="width: 7%;"> <a class="btn btn-gray" type="button" href="/" title="Edit Friends"><i class="fa fa-pencil"></i></a></td>
                 </tr>
                 <tr style="height: 100px;">
                     <td style="vertical-align: middle;"><p>You have no friends! :(</p></td>
