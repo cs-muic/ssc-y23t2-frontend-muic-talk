@@ -34,17 +34,16 @@
         <div class="container-fluid">
             <a class="navbar-brand"><strong>MUIC Talk</strong></a>
             <div class="container-fliud pull-right">
-                <a class="btn btn-gray" type="button" href="/setting"><i class="fa fa-bars"></i> &nbsp; Settings</a>
-                <a class="btn btn-gray" type="button" href="/logout"><i class="fa fa-sign-out"></i> &nbsp; Logout</a>
+                <a class="btn btn-gray" type="button" href="/"><i class="fa fa-bars"></i> &nbsp; Settings</a>
+                <a class="btn btn-gray" type="button" href="/"><i class="fa fa-sign-out"></i> &nbsp; Logout</a>
             </div>
         </div>
     </nav>
     <nav class="navbar navbar-light">
         <div class="container-fluid">
             <div class="user-profile pull-left">
-                <img src="../Images/default_img.jpeg" class="circle" alt="Default profile picture">
-                <p>Welcome, ${username}</p>
-                <p>${username}</p>
+                <img src="../Images/default_img.png" class="circle" alt="Default profile picture">
+                <p><strong>${displayname}</strong> <br> ${username}</p>
             </div>
         </div>
     </nav>

@@ -117,7 +117,7 @@
                     <span class="input-group-text" id="login-username" style="width:40px">
                         <i class="fa fa-user"></i>
                     </span>
-                    <input type="text" class="form-control" name="username" placeholder="Username"
+                    <input type="text" class="form-control" name="username" placeholder="uXXXXXXX"
                            aria-label="Username" aria-describedby="login-username">
                 </div>
                 <!-- Password -->
