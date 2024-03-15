@@ -31,7 +31,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.7); /* White with 70% opacity */
+            background-color: rgba(255, 255, 255, 0.5); /* White with 70% opacity */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Shadow for better visibility */
@@ -91,6 +91,13 @@
 </div>
 <!-- Login Form -->
 <div class="container">
+
+    <c:if test="${not empty message}">
+        <div class="alert alert-danger" role="alert">
+            Failed to Sign Up: ${message}
+        </div>
+    </c:if>
+
     <div class="row justify-content-md-center h-100">
         <div class="col-sm-12 col-md-4 my-auto">
             <div class="form-title">
@@ -137,18 +144,9 @@
 <div class="container" style="display: none;">
 
     <c:if test="${not empty message}">
-        <c:choose>
-            <c:when test="${hasError}">
-                <div class="alert alert-danger" role="alert">
-                        ${error}
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="alert alert-success" role="alert">
-                        ${message}
-                </div>
-            </c:otherwise>
-        </c:choose>
+        <div class="alert alert-danger" role="alert">
+                Failed to Sign Up: ${message}
+        </div>
     </c:if>
 
     <div class="row justify-content-md-center h-100">
@@ -216,6 +214,12 @@
             });
         });
     });
+
+    // Ensure the error message is displayed even if the sign-up form is hidden
+    const errorMessage = document.querySelector('.container.error .alert-danger');
+    if (errorMessage) {
+        errorMessage.style.display = 'block';
+    }
 </script>
 
 </body>
