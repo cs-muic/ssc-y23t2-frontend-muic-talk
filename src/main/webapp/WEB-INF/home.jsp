@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%--TODO: After Friends & Groups are implemented, further development of this page will have to be done
+          to support interactions with those objects--%>
 <html>
 <head>
     <title>MUIC Talk</title>
@@ -10,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../styles/styles.css">
     <style>
         .circle {
             width: 80px;
@@ -33,14 +35,13 @@
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand"><strong>MUIC Talk</strong></a>
-            <div class="container-fliud pull-left">
-                <a class="btn btn-gray" type="button" href="/"><i class="fa fa-home"></i> &nbsp; Home </a>
-                <a class="btn btn-gray" type="button" href="/"><i class="fa fa-calendar"></i> &nbsp; Schedule </a>
-                <a class="btn btn-gray" type="button" href="/"><i class="fa fa-comments"></i> &nbsp; Chats </a>
+            <div>
+                <a class="btn btn-primary" type="button" href="/"><i class="fa fa-home"></i> &nbsp; Home </a>
+                <a class="btn btn-primary" type="button" href="/"><i class="fa fa-calendar"></i> &nbsp; Schedule </a>
+                <a class="btn btn-primary" type="button" href="/"><i class="fa fa-comments"></i> &nbsp; Chats </a>
             </div>
-            <div class="container-fliud pull-right">
-                <a class="btn btn-gray" type="button" href="/"><i class="fa fa-bars"></i> &nbsp; Settings</a>
-                <a class="btn btn-gray" type="button" href="/"><i class="fa fa-sign-out"></i> &nbsp; Logout</a>
+            <div>
+                <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-sign-out"></i></a>
             </div>
         </div>
     </nav>
@@ -49,6 +50,9 @@
             <div class="user-profile pull-left">
                 <img src="../Images/default_img.png" class="circle" alt="Default profile picture">
                 <p><strong>${displayname}</strong> <br> ${username}</p>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-bars"></i></a>
             </div>
         </div>
     </nav>
@@ -73,21 +77,59 @@
     <div class="row">
         <div class="col-12">
             <table class="table">
-                <tr>
+                <tr style="vertical-align: middle;">
                     <td><h3><strong>Groups</strong></h3></td>
-                    <td style="width: 7%;"> <a class="btn btn-gray" type="button" href="/" title="Join Groups"><i class="fa fa-plus"></i></a></td>
-                    <td style="width: 7%;"> <a class="btn btn-gray" type="button" href="/" title="Edit Groups"><i class="fa fa-pencil"></i></a></td>
+                    <td style="padding-right: 12px">
+                        <div class="container-fliud pull-right">
+                            <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-pencil"></i></a>
+                        </div>
+                    </td>
                 </tr>
                 <tr style="height: 100px;">
-                    <td style="vertical-align: middle;"><p>You're not in any groups! :(</p></td>
+                    <c:if test="${empty groups}">
+                        <td style="vertical-align: middle;" colspan="100%"><p>You're not in any groups! :(</p></td>
+                    </c:if>
+                    <c:if test="${not empty groups}">
+                        <td colspan="100%">
+                            <table class="table">
+                                <tbody>
+                                <c:forEach var="group" items="${groups}">
+                                    <tr>
+                                        <td>${group}</td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </td>
+                    </c:if>
                 </tr>
-                <tr>
+                <tr style="vertical-align: middle;">
                     <td><h3><strong>Friends</strong></h3></td>
-                    <td style="width: 7%;"> <a class="btn btn-gray" type="button" href="/" title="Add Friends"><i class="fa fa-user-plus"></i></a></td>
-                    <td style="width: 7%;"> <a class="btn btn-gray" type="button" href="/" title="Edit Friends"><i class="fa fa-pencil"></i></a></td>
+                    <td style="padding-right: 12px">
+                        <div class="container-fliud pull-right">
+                            <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-pencil"></i></a>
+                        </div>
+                    </td>
                 </tr>
                 <tr style="height: 100px;">
-                    <td style="vertical-align: middle;"><p>You have no friends! :(</p></td>
+                    <c:if test="${empty friends}">
+                        <td style="vertical-align: middle;" colspan="100%"><p>You don't have any friends! :(</p></td>
+                    </c:if>
+                    <c:if test="${not empty friends}">
+                        <td colspan="100%">
+                            <table class="table">
+                                <tbody>
+                                <c:forEach var="friend" items="${friends}">
+                                    <tr>
+                                        <td>${friend}</td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </td>
+                    </c:if>
                 </tr>
             </table>
         </div>
