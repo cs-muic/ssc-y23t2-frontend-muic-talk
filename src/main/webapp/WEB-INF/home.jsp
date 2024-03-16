@@ -12,23 +12,6 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../styles/styles.css">
-    <style>
-        .circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .user-profile {
-            display: grid;
-            align-items: center;
-            grid-template-columns: 1fr 1fr 1fr;
-            column-gap: 5px;
-        }
-    </style>
 </head>
 <body>
 <div class="container mt-4">
@@ -48,7 +31,7 @@
     <nav class="navbar navbar-light">
         <div class="container-fluid">
             <div class="user-profile pull-left">
-                <img src="../Images/default_img.png" class="circle" alt="Default profile picture">
+                <img src="../Images/default_img.png" class="circle" alt="User profile picture">
                 <p><strong>${displayname}</strong> <br> ${username}</p>
             </div>
             <div class="pull-right">
