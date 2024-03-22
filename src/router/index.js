@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import axios from "axios";
 
 const routes = [
   {
@@ -18,12 +19,12 @@ const routes = [
   },
   {
     path: "/login",
-    name: ":ogin",
+    name: "Login",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/LoginView.vue"),
+      import(/* webpackChunkName: "login" */ "../views/LoginView.vue"),
   },
 ];
 
@@ -32,4 +33,11 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach(async (to, from, next) => {
+  // get login state using whoami axios
+  let response = await axios.get("/api/whoami");
+  console.log(response);
+  if (to.name !== "Login") next({ name: "Login" });
+  else next();
+});
 export default router;
