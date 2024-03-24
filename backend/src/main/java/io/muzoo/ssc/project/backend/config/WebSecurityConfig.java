@@ -1,6 +1,8 @@
 package io.muzoo.ssc.project.backend.config;
 
+import io.muzoo.ssc.project.backend.SimpleResponseDTO;
 import io.muzoo.ssc.project.backend.auth.OurUserDetailsService;
+import io.muzoo.ssc.project.backend.util.AjaxUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -88,8 +90,18 @@ public class WebSecurityConfig {
 		public void commence(HttpServletRequest request,
 							 HttpServletResponse response,
 							 AuthenticationException authException) throws IOException, ServletException {
-//			response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
-			response.getWriter().println("Forbidden for you nuh uh");
+
+			String ajaxJson = AjaxUtils.convertToString(
+					SimpleResponseDTO
+							.builder()
+							.success(true)
+							.message("Forbidden")
+							.build()
+
+			);
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json");
+			response.getWriter().println(ajaxJson);
 		}
 	}
 
