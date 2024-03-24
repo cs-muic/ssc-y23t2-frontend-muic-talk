@@ -1,5 +1,6 @@
-package io.muzoo.ssc.project.backend;
+package io.muzoo.ssc.project.backend.auth;
 
+import io.muzoo.ssc.project.backend.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,22 +11,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OurUserDetailsService implements UserDetailsService {
-    private final PasswordEncoder passwordEncoder;
 
-    public OurUserDetailsService(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if ("admin".equals(username)) {
-            String encodedPassword = passwordEncoder.encode("123456");
+        io.muzoo.ssc.project.backend.User user = userRepository.findFirstByUsername(username);
+
+        if (user != null) {
+
 
             return User.builder()
-                    .username("admin")
-                    .password(encodedPassword)
-                    .roles("USER")
+                    .username(user.getUsername())
+                    .password(user.getPassword())
+                    .roles(user.getRole())
                     .build();
         } else {
             throw new UsernameNotFoundException("Invalid username or password");
