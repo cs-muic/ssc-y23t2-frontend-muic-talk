@@ -58,46 +58,60 @@
                 </c:if>
             </div>
         </div>
-        <div class="row justify-content-md-center">
+<%--        Change Display Name --%>
+        <div class="row collapsible justify-content-md-center">
             <div class="container col col-sm-12 col-md-6 mb-4">
                 <div class="container-fliud">
-                    <a class="btn btn-primary" type="button" href="/"><i class="fa fa-user"></i> General Settings</a>
-                    <a class="btn btn-primary" type="button" href="/"><i class="fa fa-key"></i> Change Password</a>
+                    <a class="bg-light" ><i class="fa fa-user"></i> General Settings</a>
+                    <a class="btn btn-primary" type="button" href="#"><i class="fa fa-key"></i> Change Password</a>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="container col col-sm-12 col-md-6 mb-4">
+                    <form action="/user/edit?username=${username}" method="post">
+                        <div class="input-group mb-4 input-group-md">
+                            <span class="input-group-text" id="displayName" style="width: 40px"><i class="fa fa-user"></i></span>
+                            <input type="text" class="form-control py-2"
+                                   name="displayName" placeholder="Display Name"
+                                   aria-label="Display Name" aria-describedby="displayName"
+                                   autocomplete="off" value="${displayName}">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> &nbsp; Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="row justify-content-md-center">
+        <div class="row collapsible justify-content-md-center" style="display: none;">
             <div class="container col col-sm-12 col-md-6 mb-4">
-                <form action="/user/edit?username=${username}" method="post">
-                    <div class="input-group mb-4 input-group-md">
-                        <span class="input-group-text" id="displayName" style="width: 40px"><i class="fa fa-user"></i></span>
-                        <input type="text" class="form-control py-2"
-                               name="displayName" placeholder="Display Name"
-                               aria-label="Display Name" aria-describedby="displayName"
-                               autocomplete="off" value="${displayName}">
-                    </div>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> &nbsp; Save</button>
-                    </div>
-                </form>
+                <div class="container-fliud">
+                    <a class="btn btn-primary" type="button" href="#"><i class="fa fa-user"></i> General Settings</a>
+                    <a class="bg-light"><i class="fa fa-key"></i> Change Password</a>
+                </div>
             </div>
-            <div class="container col col-sm-12 col-md-6 mb-4" style="display: none;">
-                <form action="/user/password?username=${username}" method="post">
-                    <div class="input-group mb-4 input-group-md">
-                        <span class="input-group-text" id="password" style="width: 40px"><i class="fa fa-key"></i></span>
-                        <input type="password" class="form-control py-2"
-                               name="password" placeholder="Password"
-                               aria-label="Password" aria-describedby="password"
-                               autocomplete="off" value="${password}">
-                    </div>
-                    <div class="input-group mb-4 input-group-md">
-                        <span class="input-group-text" id="confirmPassword" style="width: 40px"><i class="fa fa-key"></i></span>
-                        <input type="password" class="form-control py-2"
-                               name="confirmPassword" placeholder="Confirm Password"
-                               aria-label="Confirm Password" aria-describedby="confirmPassword"
-                               autocomplete="off" value="${confirmPassword}">
-                    </div>
-                </form>
+            <div class="row  justify-content-md-center">
+                <div class="container col-sm-12 col-md-6 mb-4">
+                    <form action="/user/password?username=${username}" method="post">
+                        <div class="input-group mb-4 input-group-md">
+                            <span class="input-group-text" id="password" style="width: 40px"><i class="fa fa-key"></i></span>
+                            <input type="password" class="form-control py-2"
+                                   name="password" placeholder="Password"
+                                   aria-label="Password" aria-describedby="password"
+                                   autocomplete="off" value="${password}">
+                        </div>
+                        <div class="input-group mb-4 input-group-md">
+                            <span class="input-group-text" id="confirmPassword" style="width: 40px"><i class="fa fa-key"></i></span>
+                            <input type="password" class="form-control py-2"
+                                   name="confirmPassword" placeholder="Confirm Password"
+                                   aria-label="Confirm Password" aria-describedby="confirmPassword"
+                                   autocomplete="off" value="${confirmPassword}">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> &nbsp; Save</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -105,17 +119,11 @@
 <script>
     document.querySelectorAll('a[href="#"]').forEach(link => {
         link.addEventListener('click', () => {
-            document.querySelectorAll('.container').forEach(container => {
-                container.style.display = container.style.display === 'none' ? '' : 'none';
+            document.querySelectorAll('.collapsible').forEach(collapsible => {
+                collapsible.style.display = collapsible.style.display === 'none' ? '' : 'none';
             });
         });
     });
-
-    // Ensure the error message is displayed even if the sign-up form is hidden
-    const errorMessage = document.querySelector('.container.error .alert-danger');
-    if (errorMessage) {
-        errorMessage.style.display = 'block';
-    }
 </script>
 </body>
 </html>
