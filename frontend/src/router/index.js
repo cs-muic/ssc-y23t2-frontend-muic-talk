@@ -34,4 +34,14 @@ const router = new VueRouter({
   routes,
 });
 
+router.beforeEach(async (to, from, next) => {
+  let response = await Vue.axios.get("/api/whoami");
+  console.log(response);
+  if (to.name !== "login") {
+    next({ name: "login" });
+  } else {
+    next();
+  }
+});
+
 export default router;
