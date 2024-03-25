@@ -62,7 +62,7 @@
         <div class="row collapsible justify-content-md-center">
             <div class="container col col-sm-12 col-md-6 mb-4">
                 <div class="container-fliud">
-                    <a class="bg-light" ><i class="fa fa-user"></i> General Settings</a>
+                    <a class="btn btn-primary disabled" ><i class="fa fa-user"></i> General Settings</a>
                     <a class="btn btn-primary" type="button" href="#"><i class="fa fa-key"></i> Change Password</a>
                 </div>
             </div>
@@ -87,23 +87,30 @@
             <div class="container col col-sm-12 col-md-6 mb-4">
                 <div class="container-fliud">
                     <a class="btn btn-primary" type="button" href="#"><i class="fa fa-user"></i> General Settings</a>
-                    <a class="bg-light"><i class="fa fa-key"></i> Change Password</a>
+                    <a class="btn disabled btn-primary"><i class="fa fa-key"></i> Change Password</a>
                 </div>
             </div>
             <div class="row  justify-content-md-center">
                 <div class="container col-sm-12 col-md-6 mb-4">
                     <form action="/user/password?username=${username}" method="post">
                         <div class="input-group mb-4 input-group-md">
+                            <span class="input-group-text" id="oldPassword" style="width: 40px"><i class="fa fa-key"></i></span>
+                            <input type="password" class="form-control py-2"
+                                   name="oldPassword" placeholder="Current Password"
+                                   aria-label="oldPassword" aria-describedby="oldPassword"
+                                   autocomplete="off" value="${password}">
+                        </div>
+                        <div class="input-group mb-4 input-group-md">
                             <span class="input-group-text" id="password" style="width: 40px"><i class="fa fa-key"></i></span>
                             <input type="password" class="form-control py-2"
-                                   name="password" placeholder="Password"
+                                   name="password" placeholder="New Password"
                                    aria-label="Password" aria-describedby="password"
                                    autocomplete="off" value="${password}">
                         </div>
                         <div class="input-group mb-4 input-group-md">
                             <span class="input-group-text" id="confirmPassword" style="width: 40px"><i class="fa fa-key"></i></span>
                             <input type="password" class="form-control py-2"
-                                   name="confirmPassword" placeholder="Confirm Password"
+                                   name="confirmPassword" placeholder="Confirm New Password"
                                    aria-label="Confirm Password" aria-describedby="confirmPassword"
                                    autocomplete="off" value="${confirmPassword}">
                         </div>
