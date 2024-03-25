@@ -44,7 +44,7 @@ public class WebSecurityConfig {
 		//allow root and /api/login, /api/logout
 		http.authorizeHttpRequests((authorizeHttpRequests) ->
 				authorizeHttpRequests
-						.requestMatchers("/", "/api/login", "/api/logout")
+						.requestMatchers("/", "/api/login", "/api/logout", "/api/whoami")
 						.permitAll()
 		);
 
@@ -94,7 +94,7 @@ public class WebSecurityConfig {
 			String ajaxJson = AjaxUtils.convertToString(
 					SimpleResponseDTO
 							.builder()
-							.success(true)
+							.success(false)
 							.message("Forbidden")
 							.build()
 
