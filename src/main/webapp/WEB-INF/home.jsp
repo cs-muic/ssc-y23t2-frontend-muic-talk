@@ -21,10 +21,10 @@
             <div>
                 <a class="btn btn-primary" type="button" href="/"><i class="fa fa-home"></i> &nbsp; Home </a>
                 <a class="btn btn-primary" type="button" href="/"><i class="fa fa-calendar"></i> &nbsp; Schedule </a>
-                <a class="btn btn-primary" type="button" href="/"><i class="fa fa-comments"></i> &nbsp; Chats </a>
+                <a class="btn btn-primary" type="button" href="/chat"><i class="fa fa-comments"></i> &nbsp; Chats </a>
             </div>
             <div>
-                <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-sign-out"></i></a>
+                <a class="btn btn-primary btn-w40" type="button" href="/logout"><i class="fa fa-sign-out"></i></a>
             </div>
         </div>
     </nav>
@@ -35,7 +35,7 @@
                 <p><strong>${displayname}</strong> <br> ${username}</p>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-bars"></i></a>
+                <a class="btn btn-primary btn-w40" type="button" href="/user/edit"><i class="fa fa-cog"></i></a>
             </div>
         </div>
     </nav>
