@@ -40,6 +40,7 @@ router.beforeEach(async (to, from, next) => {
   // response.data is our payload
   store.dispatch("setLoggedInUser", response.data);
   let isLoggedIn = store.state.isLoggedIn;
+  console.log(isLoggedIn);
   //if the name of the router is not Login, it needs authorrization to access the page
   if (to.name !== "login" && !isLoggedIn) {
     //redirect to login page
