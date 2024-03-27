@@ -91,7 +91,38 @@
                     <td><h3><strong>Friends</strong></h3></td>
                     <td style="padding-right: 12px">
                         <div class="container-fliud pull-right">
-                            <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-plus"></i></a>
+                            <button class="btn btn-primary btn-w40" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#add-friend">
+                                <i class="fa fa-plus"></i>
+                            </button>
+<%--                            Pop up for adding friends--%>
+                            <div class="modal fade" id="add-friend" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Friend</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body my-4">
+                                            <form action="/user/add" method="post">
+                                                <div class="input-group mb-4 input-group-md">
+                                                    <span class="input-group-text" id="friendUser" style="width: 40px"><i class="fa fa-user"></i></span>
+                                                    <input type="text" class="form-control py-2"
+                                                           name="friendUser" placeholder="uXXXXXXX"
+                                                           aria-label="Friend Username" aria-describedby="friendUser"
+                                                           autocomplete="off">
+                                                </div>
+                                                <div class="d-grid gap-2">
+                                                    <button class="btn btn-primary" type="submit" ><i class="fa fa-plus"></i> &nbsp; Add</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-pencil"></i></a>
                         </div>
                     </td>
@@ -104,9 +135,20 @@
                         <td colspan="100%">
                             <table class="table">
                                 <tbody>
+                                <c:forEach var="request" items="${friendRequests}">
+                                    <tr>
+                                        <td height="50px">
+                                        <div class="container-fliud">
+                                            <div class="pull-left" style="vertical-align: middle;">${request.displayName}</div>
+                                            <a class="btn btn-primary btn-w40 pull-right" type="button"
+                                               href="/user/add/accept?requestUser=${request.username}"><i class="fa fa-check"></i></a>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                                 <c:forEach var="friend" items="${friends}">
                                     <tr>
-                                        <td>${friend}</td>
+                                        <td height="50px" style="vertical-align: middle;">${friend.displayName}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
