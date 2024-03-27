@@ -115,15 +115,14 @@
                                                            aria-label="Friend Username" aria-describedby="friendUser"
                                                            autocomplete="off">
                                                 </div>
-                                                <div class="modal-footer d-grid gap-2">
-                                                    <button class="btn btn-primary" type="submit" ><i class="fa fa-save"></i> &nbsp; Add</button>
+                                                <div class="d-grid gap-2">
+                                                    <button class="btn btn-primary" type="submit" ><i class="fa fa-plus"></i> &nbsp; Add</button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-<%--                            <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-plus"></i></a>--%>
                             <a class="btn btn-primary btn-w40" type="button" href="/"><i class="fa fa-pencil"></i></a>
                         </div>
                     </td>
@@ -136,9 +135,20 @@
                         <td colspan="100%">
                             <table class="table">
                                 <tbody>
+                                <c:forEach var="request" items="${friendRequests}">
+                                    <tr>
+                                        <td height="50px">
+                                        <div class="container-fliud">
+                                            <div class="pull-left" style="vertical-align: middle;">${request.displayName}</div>
+                                            <a class="btn btn-primary btn-w40 pull-right" type="button"
+                                               href="/user/add/accept?requestUser=${request.username}"><i class="fa fa-check"></i></a>
+                                        </div>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
                                 <c:forEach var="friend" items="${friends}">
                                     <tr>
-                                        <td>${friend.username}</td>
+                                        <td height="50px" style="vertical-align: middle;">${friend.displayName}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
