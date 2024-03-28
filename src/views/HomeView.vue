@@ -3,28 +3,22 @@
     <h2>Home</h2>
     <ul>
       <li>
-        <router-link to="/"> Go to Home </router-link>
+        <router-link to="/">Go to Home</router-link>
       </li>
       <li>
-        <router-link to="/about"> Go to About </router-link>
+        <router-link to="/about">Go to AboutView</router-link>
       </li>
       <li>
-        <router-link to="/login"> Go to Login </router-link>
+        <router-link to="/login">Go to LoginView</router-link>
       </li>
     </ul>
   </v-container>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+export default {
+  name: "Home",
 
-// Components
-
-export default defineComponent({
-  name: "HomeView",
-
-  components: {
-    // HelloWorld,
-  },
-});
+  components: {},
+};
 </script>

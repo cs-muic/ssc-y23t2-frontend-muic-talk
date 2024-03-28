@@ -1,6 +1,9 @@
-import { createStore } from "vuex";
+import Vue from "vue";
+import Vuex from "vuex";
 
-export default createStore({
+Vue.use(Vuex);
+
+export default new Vuex.Store({
   state: {
     isLoggedIn: false,
     username: null,
@@ -9,19 +12,32 @@ export default createStore({
   },
   getters: {},
   mutations: {
-    setLoggedInUser(state, payload) {
-      state.isLoggedIn = true;
-      state.username = payload.username;
-      state.name = payload.name;
-      state.role = payload.role;
+    setIsLoggedIn(state, isLoggedIn) {
+      state.isLoggedIn = isLoggedIn;
     },
-    clearUser(state) {
-      state.isLoggedIn = false;
-      state.username = null;
-      state.name = null;
-      state.role = "";
+    setUsername(state, username) {
+      state.username = username;
+    },
+    setName(state, name) {
+      state.name = name;
+    },
+    setRole(state, role) {
+      state.role = role;
     },
   },
-  actions: {},
+  actions: {
+    setLoggedInUser({ commit }, payload) {
+      commit("setIsLoggedIn", payload.loggedIn);
+      commit("setUsername", payload.username);
+      commit("setName", payload.name);
+      commit("setRole", payload.role);
+    },
+    clearUser({ commit }) {
+      commit("setIsLoggedIn", false);
+      commit("setUsername", null);
+      commit("setName", null);
+      commit("setRole", "");
+    },
+  },
   modules: {},
 });

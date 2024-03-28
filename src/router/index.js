@@ -1,16 +1,19 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import Vue from "vue";
+import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import axios from "axios";
+import store from "@/store";
+
+Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "home",
     component: HomeView,
   },
   {
     path: "/about",
-    name: "About",
+    name: "about",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -19,25 +22,37 @@ const routes = [
   },
   {
     path: "/login",
-    name: "Login",
+    name: "login",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "login" */ "../views/LoginView.vue"),
+      import(/* webpackChunkName: "about" */ "../views/LoginView.vue"),
   },
 ];
 
-const router = createRouter({
-  history: createWebHashHistory(),
+const router = new VueRouter({
   routes,
 });
 
 router.beforeEach(async (to, from, next) => {
-  // get login state using whoami axios
-  let response = await axios.get("/api/whoami");
-  console.log(response);
-  if (to.name !== "Login") next({ name: "Login" });
-  else next();
+  let response = await Vue.axios.get("/api/whoami");
+  // response.data is our payload
+  await store.dispatch("setLoggedInUser", response.data);
+  let isLoggedIn = store.state.isLoggedIn;
+  // make surer if user is lggged in, it will not see homepage
+  if (to.name === "login" && isLoggedIn) {
+    next({ name: "home" });
+  }
+  console.log(isLoggedIn);
+  //if the name of the router is not Login, it needs authorization to access the page
+  if (to.name !== "login" && !isLoggedIn) {
+    //redirect to login page
+    next({ name: "login" });
+  } else {
+    // otherwise, let it go
+    next();
+  }
 });
+
 export default router;
