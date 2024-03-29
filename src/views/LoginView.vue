@@ -187,21 +187,16 @@ export default {
   // reactive state
   data() {
     return {
-      count: 0,
       show: true,
     };
   },
   // functions that mutate state and trigger updates
   methods: {
-    increment() {
-      this.count++;
-    },
+    increment() {},
   },
 
   // lifecycle hooks
-  mounted() {
-    console.log(`The initial count is ${this.count}.`);
-  },
+  mounted() {},
 };
 
 // Ensure the error message is displayed even if the sign-up form is hidden
