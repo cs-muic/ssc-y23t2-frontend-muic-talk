@@ -20,7 +20,7 @@
               </div>
             </div>
           </div>
-          <form action="/login" method="post">
+          <form action="/api/login" method="post">
             <!-- Username -->
             <div class="input-group mb-4 input-group-md">
               <span
@@ -98,7 +98,7 @@
                 type="text"
                 class="form-control"
                 name="username"
-                placeholder="Username"
+                placeholder="uXXXXXXX"
                 aria-label="Username"
                 aria-describedby="signup-username"
                 autocomplete="off"
