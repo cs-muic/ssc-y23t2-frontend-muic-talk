@@ -1,4 +1,4 @@
-<style>
+<style scoped>
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
@@ -48,10 +48,11 @@
           </p>
         </div>
         <div class="pull-right">
-          <v-btn color="primary" class="btn btn-primary">
-            <!--This should go to user edit page-->
-            <i class="fa fa-cog"></i>
-          </v-btn>
+          <router-link to="/settings">
+            <v-btn color="primary">
+              <i class="fa fa-cog"></i>
+            </v-btn>
+          </router-link>
         </div>
       </div>
     </nav>
@@ -86,8 +87,8 @@
                 <v-btn color="primary" @click="addFriends = !addFriends">
                   <i class="fa fa-plus"></i>
                 </v-btn>
-                <div class="modal" tabindex="-1" v-show="addFriends === true">
-                  <div class="modal-dialog w-50" v-show="addFriends">
+                <div class="modal" tabindex="-1" v-if="addFriends === true">
+                  <div class="modal-dialog w-50">
                     <div class="modal-content">
                       <header class="modal-header">
                         <slot name="header">
@@ -103,7 +104,7 @@
                       <section class="modal-body my-4">
                         <slot name="body">
                           <div class="row">
-                            <div class="col col-lg-2">
+                            <div class="col">
                               <v-form id="add-friend-form" lazy-validation>
                                 <v-text-field
                                   v-model="friendUser"
