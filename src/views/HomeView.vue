@@ -83,60 +83,51 @@
             </td>
             <td style="padding-right: 12px">
               <div class="container-fliud pull-right">
-                <v-btn color="primary">
+                <v-btn color="primary" @click="addFriends = !addFriends">
                   <i class="fa fa-plus"></i>
                 </v-btn>
-                <!--Pop up for adding friends-->
                 <div
-                  class="modal fade"
+                  class="modal"
                   id="add-friend"
                   tabindex="-1"
                   aria-labelledby="exampleModalLabel"
                   aria-hidden="true"
+                  v-show="addFriends"
                 >
                   <div class="modal-dialog">
                     <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">
-                          Add Friend
-                        </h1>
+                      <header class="modal-header">
+                        <slot name="header">
+                          <strong> Add Friends! </strong>
+                        </slot>
                         <button
                           type="button"
                           class="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
+                          @click="addFriends = !addFriends"
                         ></button>
-                      </div>
+                      </header>
 
-                      <div class="modal-body my-4">
-                        <form action="/user/add" method="post">
-                          <div class="input-group mb-4 input-group-md">
-                            <span
-                              class="input-group-text"
-                              id="friendUser"
-                              style="width: 40px"
-                              ><i class="fa fa-user"></i
-                            ></span>
-                            <input
-                              type="text"
-                              class="form-control py-2"
-                              name="friendUser"
-                              placeholder="uXXXXXXX"
-                              aria-label="Friend Username"
-                              aria-describedby="friendUser"
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div class="d-grid gap-2">
-                            <button class="btn btn-primary" type="submit">
+                      <section class="modal-body my-4">
+                        <slot name="body">
+                          <v-form ref="form" lazy-validation>
+                            <v-text-field
+                              v-model="friendUser"
+                              label="Search for friend's username"
+                            ></v-text-field>
+                            <v-btn
+                              class="btn btn-primary"
+                              type="submit"
+                              @click="sendFriendReq"
+                            >
                               <i class="fa fa-plus"></i> &nbsp; Add
-                            </button>
-                          </div>
-                        </form>
-                      </div>
+                            </v-btn>
+                          </v-form>
+                        </slot>
+                      </section>
                     </div>
                   </div>
                 </div>
+                <!--Pop up for adding friends-->
                 <v-btn color="primary">
                   <i class="fa fa-pencil"></i>
                 </v-btn>
@@ -160,6 +151,8 @@ export default {
     name: "Home",
     username: store.state.username,
     displayName: store.state.name,
+    friendUser: "",
+    addFriends: false,
     components: {},
   }),
   methods: {
@@ -169,12 +162,15 @@ export default {
         this.$router.push("/login");
       }
     },
-    async mounted() {
-      let response = await Vue.axios.get("/api/whoami");
-      this.username = response.data.username;
-      this.displayName = response.data.displayName;
-      console.log(this.username);
-      console.log(this.displayName);
+    async sendFriendReq() {
+      let formData = new FormData();
+      formData.append("username", this.username);
+      formData.append("userToAdd", this.friendUser);
+      let response = await Vue.axios.post("/user/add", formData);
+      if (response.data.success) {
+        this.addFriends = false;
+        this.friendUser = "";
+      }
     },
   },
 };
