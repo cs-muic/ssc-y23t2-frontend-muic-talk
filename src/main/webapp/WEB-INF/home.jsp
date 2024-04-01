@@ -20,7 +20,7 @@
             <a class="navbar-brand"><strong>MUIC Talk</strong></a>
             <div>
                 <a class="btn btn-primary" type="button" href="/"><i class="fa fa-home"></i> &nbsp; Home </a>
-                <a class="btn btn-primary" type="button" href="/"><i class="fa fa-calendar"></i> &nbsp; Schedule </a>
+                <a class="btn btn-primary" type="button" href="/schedule"><i class="fa fa-calendar"></i> &nbsp; Schedule </a>
                 <a class="btn btn-primary" type="button" href="/chat"><i class="fa fa-comments"></i> &nbsp; Chats </a>
             </div>
             <div>

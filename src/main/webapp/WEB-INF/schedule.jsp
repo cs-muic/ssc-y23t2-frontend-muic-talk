@@ -53,15 +53,15 @@
             <h3>Add Event</h3>
             <div>
                 <label for="event-name">Event Name:</label>
-                <input type="text" id="event-name" class="form-control" required>
+                <input type="text" id="event-name" name="eventName" class="form-control" required>
             </div>
             <div class="mt-3">
                 <label for="event-date">Event Date:</label>
-                <input type="date" id="event-date" class="form-control" required>
+                <input type="date" id="event-date" name="eventDate" class="form-control" required>
             </div>
             <div class="mt-3">
                 <label for="event-time">Event Time:</label>
-                <input type="time" id="event-time" class="form-control" required>
+                <input type="time" id="event-time" name="eventTime" class="form-control" required>
             </div>
             <div class="mt-3">
                 <button class="btn btn-primary" onclick="addEvent()">Add Event</button>
@@ -102,6 +102,21 @@
 <script>
     var events = []; // Array to store all events
 
+    function fetchEvents() {
+        // Fetch events from the server
+        fetch('/api/events')
+            .then(response => response.json())
+            .then(events => {
+                // Update the events array with the fetched events
+                window.events = events;
+                // Display all events
+                displayAllEvents();
+                // Update weekly schedule display
+                displayWeeklySchedule();
+            })
+            .catch(error => console.error('Error fetching events:', error));
+    }
+
     function addEvent() {
         var eventName = document.getElementById('event-name').value;
         var eventDate = new Date(document.getElementById('event-date').value);
@@ -109,7 +124,6 @@
 
         // Combine date and time to create a single DateTime object
         var eventDateTime = new Date(eventDate.toDateString() + ' ' + eventTime);
-        var m = eventDate.getMonth() + 1;
 
         if (eventName && eventDateTime) {
             var event = {
@@ -117,16 +131,36 @@
                 dateTime: eventDateTime
             };
 
-            events.push(event); // Add event to the events array
+            // Add event to the events array
+            events.push(event);
 
-            var eventHtml = '<div class="event"><strong>' + eventName + '</strong> - ' + m + '</strong>/'+ eventDate.getDate() + '</strong>/'+ eventDate.getFullYear() + '</strong> at ' + formatTime(eventDateTime) +
-                '<button class="btn btn-danger btn-sm delete-btn" onclick="deleteEvent(' + (events.length - 1) + ')"><i class="fa fa-close"></i></button></div>';
-            document.getElementById('all-events').insertAdjacentHTML('beforeend', eventHtml);
-            displayWeeklySchedule(); // Update weekly schedule display
+            // Display all events
+            displayAllEvents();
+
+            // Update weekly schedule display
+            displayWeeklySchedule();
+
+            // Send the new event data to the server
+            fetch('/api/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(event)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to add event');
+                    }
+                })
+                .catch(error => console.error('Error adding event:', error));
         } else {
             alert('Please fill out all fields.');
         }
     }
+
+    // Initial fetch of events when the page loads
+    // fetchEvents();
 
     function formatTime(dateTime) {
         var hour = dateTime.getHours();
