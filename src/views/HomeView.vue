@@ -86,15 +86,8 @@
                 <v-btn color="primary" @click="addFriends = !addFriends">
                   <i class="fa fa-plus"></i>
                 </v-btn>
-                <div
-                  class="modal"
-                  id="add-friend"
-                  tabindex="-1"
-                  aria-labelledby="exampleModalLabel"
-                  aria-hidden="true"
-                  v-show="addFriends"
-                >
-                  <div class="modal-dialog">
+                <div class="modal" tabindex="-1" v-show="addFriends === true">
+                  <div class="modal-dialog w-50" v-show="addFriends">
                     <div class="modal-content">
                       <header class="modal-header">
                         <slot name="header">
@@ -109,19 +102,27 @@
 
                       <section class="modal-body my-4">
                         <slot name="body">
-                          <v-form ref="form" lazy-validation>
-                            <v-text-field
-                              v-model="friendUser"
-                              label="Search for friend's username"
-                            ></v-text-field>
-                            <v-btn
-                              class="btn btn-primary"
-                              type="submit"
-                              @click="sendFriendReq"
-                            >
-                              <i class="fa fa-plus"></i> &nbsp; Add
-                            </v-btn>
-                          </v-form>
+                          <div class="row">
+                            <div class="col col-lg-2">
+                              <v-form id="add-friend-form" lazy-validation>
+                                <v-text-field
+                                  v-model="friendUser"
+                                  label="Search for friend's username"
+                                ></v-text-field>
+                              </v-form>
+                            </div>
+                            <div class="col col-md-auto">
+                              <v-btn
+                                class="mt-3"
+                                color="primary"
+                                type="submit"
+                                form="add-friend-form"
+                                @click="sendFriendReq"
+                              >
+                                <i class="fa fa-plus"></i> &nbsp; Add
+                              </v-btn>
+                            </div>
+                          </div>
                         </slot>
                       </section>
                     </div>
@@ -161,6 +162,11 @@ export default {
       if (response.data.success) {
         this.$router.push("/login");
       }
+    },
+    showAddFriends() {
+      console.log("Show add friends" + this.addFriends);
+      this.addFriends = !this.addFriends;
+      console.log("Show add friends" + this.addFriends);
     },
     async sendFriendReq() {
       let formData = new FormData();
