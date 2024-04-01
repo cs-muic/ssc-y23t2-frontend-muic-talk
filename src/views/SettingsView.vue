@@ -98,16 +98,32 @@
               >
                 <i class="fa fa-save"></i> &nbsp; Save
               </v-btn>
+              <div
+                class="alert alert-danger mt-5"
+                role="alert"
+                v-show="changeDisplayName.error"
+              >
+                {{ changeDisplayName.message }}
+              </div>
+              <div
+                class="alert alert-success mt-5"
+                role="alert"
+                v-show="changeDisplayName.success"
+              >
+                {{ changeDisplayName.message }}
+              </div>
             </v-form>
             <v-form ref="form" v-show="changePassword.show" lazy-validation>
               <h4>Change Password</h4>
               <v-text-field
+                type="password"
                 v-model="changePassword.oldPassword"
                 :rules="changePassword.passwordRules"
                 label="Old Password"
                 required
               ></v-text-field>
               <v-text-field
+                type="password"
                 v-model="changePassword.newPassword"
                 :rules="changePassword.passwordRules"
                 label="New Password"
@@ -120,6 +136,20 @@
               >
                 <i class="fa fa-save"></i> &nbsp; Save
               </v-btn>
+              <div
+                class="alert alert-danger mt-5"
+                role="alert"
+                v-show="changePassword.error"
+              >
+                {{ changePassword.message }}
+              </div>
+              <div
+                class="alert alert-success mt-5"
+                role="alert"
+                v-show="changePassword.success"
+              >
+                {{ changePassword.message }}
+              </div>
             </v-form>
           </v-main>
         </v-layout>
@@ -164,48 +194,44 @@ export default {
       }
     },
     async submit_displayName() {
-      if (this.$refs.form.validate()) {
-        //submit to backend to authenticate
-        let formData = new FormData();
-        formData.append("username", this.username);
-        formData.append(
-          "newDisplayName",
-          this.changeDisplayName.newDisplayName
-        );
-        let response = await Vue.axios.post("/user/displayName", formData);
-        if (response.data.success) {
-          this.displayName = this.changeDisplayName.newDisplayName;
-          this.changeDisplayName.success = true;
-          this.changeDisplayName.message = response.data.message;
-          this.changeDisplayName.error = false;
-        } else {
-          this.changeDisplayName.error = true;
-          this.changeDisplayName.success = false;
-          this.changeDisplayName.message = response.data.message;
-        }
+      console.log("Hi? :(");
+      let formData = new FormData();
+      formData.append("username", this.username);
+      formData.append("displayName", this.changeDisplayName.newDisplayName);
+      console.log("Hi! :)");
+      let response = await Vue.axios.post("/user/displayName", formData);
+      if (response.data.success) {
+        this.displayName = this.changeDisplayName.newDisplayName;
+        store.state.name = this.displayName;
+        this.changeDisplayName.success = true;
+        this.changeDisplayName.message = response.data.message;
+        this.changeDisplayName.error = false;
+      } else {
+        this.changeDisplayName.error = true;
+        this.changeDisplayName.success = false;
+        this.changeDisplayName.message = response.data.message;
       }
     },
     async submit_password() {
-      if (this.$refs.form.validate()) {
-        //submit to backend to authenticate
-        let formData = new FormData();
-        formData.append("username", this.username);
-        formData.append("oldPassword", this.changePassword.oldPassword);
-        formData.append("newPassword", this.changePassword.newPassword);
-        let response = await Vue.axios.post("/user/password", formData);
-        if (response.data.success) {
-          this.changePassword.oldPassword = "";
-          this.changePassword.newPassword = "";
-          this.changeDisplayName.success = true;
-          this.changeDisplayName.message = response.data.message;
-          this.changeDisplayName.error = false;
-        } else {
-          this.changePassword.oldPassword = "";
-          this.changePassword.newPassword = "";
-          this.changeDisplayName.error = true;
-          this.changeDisplayName.success = false;
-          this.changeDisplayName.message = response.data.message;
-        }
+      let formData = new FormData();
+      formData.append("username", this.username);
+      formData.append("oldPassword", this.changePassword.oldPassword);
+      formData.append("newPassword", this.changePassword.newPassword);
+      let response = await Vue.axios.post("/user/password", formData);
+      if (response.data.success) {
+        console.log("yay");
+        this.changePassword.oldPassword = "";
+        this.changePassword.newPassword = "";
+        this.changePassword.success = true;
+        this.changePassword.message = response.data.message;
+        this.changePassword.error = false;
+      } else {
+        console.log("aw");
+        this.changePassword.oldPassword = "";
+        this.changePassword.newPassword = "";
+        this.changePassword.error = true;
+        this.changePassword.success = false;
+        this.changePassword.message = response.data.message;
       }
     },
   },
