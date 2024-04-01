@@ -6,7 +6,10 @@
     background-color: #550a8a;
     border-color: #550a8a;
 }
-
+.btn-primary:focus {
+    background-color: #550a8a;
+    border-color: #550a8a;
+}
 .navbar-primary {
     background-color: #550a8a;
     border-color: #550a8a;

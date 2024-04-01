@@ -13,17 +13,17 @@
         <div>
           <router-link to="/">
             <v-btn color="primary">
-              <i class="fa fa-home"> &nbsp; Home</i>
+              <i class="fa fa-home"></i> &nbsp; Home
             </v-btn>
           </router-link>
           <router-link to="/schedule">
             <v-btn color="primary">
-              <i class="fa fa-calendar"> &nbsp; Schedule</i>
+              <i class="fa fa-calendar"></i> &nbsp; Schedule
             </v-btn>
           </router-link>
           <router-link to="/chat">
             <v-btn color="primary">
-              <i class="fa fa-comments"> &nbsp; Chats</i>
+              <i class="fa fa-comments"></i> &nbsp; Chats
             </v-btn>
           </router-link>
         </div>
