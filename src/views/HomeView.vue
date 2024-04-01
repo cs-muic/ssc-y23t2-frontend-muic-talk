@@ -2,7 +2,6 @@
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
-@import "@mdi/font/css/materialdesignicons.css";
 @import "../main/webapp/styles/styles.css";
 </style>
 
@@ -86,12 +85,12 @@
             <td style="padding-right: 12px">
               <div class="container-fliud pull-right">
                 <template>
-                  <v-dialog v-model="dialog" max-width="500">
+                  <v-dialog v-model="addFriends.dialog" max-width="500">
                     <template v-slot:activator="{ props: activatorProps }">
                       <v-btn
                         color="primary"
                         v-bind="activatorProps"
-                        @click="dialog = true"
+                        @click="addFriends.dialog = true"
                         ><i class="fa fa-plus"></i
                       ></v-btn>
                     </template>
@@ -101,7 +100,10 @@
                         class="d-flex justify-space-between align-center"
                       >
                         Add Friends!
-                        <v-btn color="primary" @click="dialog = false">
+                        <v-btn
+                          color="primary"
+                          @click="addFriends.dialog = false"
+                        >
                           <i class="fa fa-close"></i>
                         </v-btn>
                       </v-card-title>
@@ -114,7 +116,7 @@
                             <div class="col">
                               <v-form id="add-friend-form" lazy-validation>
                                 <v-text-field
-                                  v-model="friendUser"
+                                  v-model="addFriends.toAdd"
                                   label="Search for friend's username"
                                 ></v-text-field>
                               </v-form>
@@ -130,6 +132,20 @@
                                 <i class="fa fa-plus"></i> &nbsp; Add
                               </v-btn>
                             </div>
+                          </div>
+                          <div
+                            class="alert alert-danger"
+                            role="alert"
+                            v-show="addFriends.error"
+                          >
+                            {{ addFriends.message }}
+                          </div>
+                          <div
+                            class="alert alert-success"
+                            role="alert"
+                            v-show="addFriends.success"
+                          >
+                            {{ addFriends.message }}
                           </div>
                         </v-row>
                       </v-card-text>
@@ -159,9 +175,13 @@ export default {
     name: "Home",
     username: store.state.username,
     displayName: store.state.name,
-    friendUser: "",
-    addFriends: false,
-    dialog: false,
+    addFriends: {
+      toAdd: "",
+      dialog: false,
+      error: false,
+      success: false,
+      message: "",
+    },
     components: {},
   }),
   methods: {
@@ -174,11 +194,16 @@ export default {
     async sendFriendReq() {
       let formData = new FormData();
       formData.append("username", this.username);
-      formData.append("userToAdd", this.friendUser);
+      formData.append("userToAdd", this.addFriends.toAdd);
       let response = await Vue.axios.post("/user/add", formData);
       if (response.data.success) {
-        this.addFriends = false;
-        this.friendUser = "";
+        this.addFriends.toAdd = "";
+        this.addFriends.success = true;
+        this.addFriends.message = response.data.message;
+      } else {
+        this.addFriends.error = true;
+        this.addFriends.success = false;
+        this.addFriends.message = response.data.message;
       }
     },
   },

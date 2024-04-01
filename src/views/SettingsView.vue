@@ -42,7 +42,7 @@
             <img
               src="../main/webapp/Images/default_img.png"
               class="circle"
-              style="height: 160px width: 160px"
+              style="height: 160px; width: 160px"
               alt="User profile picture"
             />
             <h4>
