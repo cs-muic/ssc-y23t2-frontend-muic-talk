@@ -20,48 +20,30 @@
               </div>
             </div>
           </div>
-          <form action="/api/login" method="post">
-            <!-- Username -->
-            <div class="input-group mb-4 input-group-md">
-              <span
-                class="input-group-text"
-                id="login-username"
-                style="width: 40px"
-                ><i class="fa fa-user"></i>
-              </span>
-              <input
-                type="text"
-                class="form-control"
-                name="username"
-                placeholder="uXXXXXXX"
-                aria-label="Username"
-                aria-describedby="login-username"
-              />
-            </div>
-            <!-- Password -->
-            <div class="input-group mb-4 input-group-md">
-              <span
-                class="input-group-text"
-                id="login-password"
-                style="width: 40px"
-                ><i class="fa fa-key"></i>
-              </span>
-              <input
-                type="password"
-                class="form-control"
-                name="password"
-                placeholder="Password"
-                aria-label="Password"
-                aria-describedby="login-password"
-              />
-            </div>
-            <!-- Login Button -->
-            <div class="d-grid gap-2">
-              <button class="btn btn-primary" type="submit">
-                <i class="fa fa-sign-in"></i>&nbsp;Login
-              </button>
-            </div>
-          </form>
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field
+              v-model="username"
+              :rules="usernameRules"
+              label="Username"
+              required
+            ></v-text-field>
+            <v-text-field
+              type="password"
+              v-model="password.password"
+              :rules="passwordRules"
+              label="Password"
+              required
+            ></v-text-field>
+
+            <v-btn
+              :disabled="!valid"
+              color="btn btn-primary"
+              class="btn btn-primary"
+              @click="submit_login"
+            >
+              Login
+            </v-btn>
+          </v-form>
           <!-- Link to Sign Up -->
           <div class="mt-3">
             Don't have an account? <a @click="show = !show">Sign Up</a>
@@ -69,6 +51,7 @@
         </div>
       </div>
     </div>
+    <!--    Sign Up form!-->
     <div class="container" v-else>
       <div class="row justify-content-md-center h-100">
         <div class="col-sm-12 col-md-4 my-auto">
@@ -85,93 +68,35 @@
               </div>
             </div>
           </div>
-          <form action="/user/create" method="post">
-            <!-- Username -->
-            <div class="input-group mb-4 input-group-md">
-              <span
-                class="input-group-text"
-                id="signup-username"
-                style="width: 40px"
-                ><i class="fa fa-user"></i>
-              </span>
-              <input
-                type="text"
-                class="form-control"
-                name="username"
-                placeholder="uXXXXXXX"
-                aria-label="Username"
-                aria-describedby="signup-username"
-                autocomplete="off"
-                value=""
-                required
-              />
-            </div>
-            <!-- Display Name -->
-            <div class="input-group mb-4 input-group-md">
-              <span
-                class="input-group-text"
-                id="signup-displayName"
-                style="width: 40px"
-                ><i class="fa fa-user"></i>
-              </span>
-              <input
-                type="text"
-                class="form-control"
-                name="displayName"
-                placeholder="Display Name"
-                aria-label="DisplayName"
-                aria-describedby="signup-displayName"
-                autocomplete="off"
-                value=""
-                required
-              />
-            </div>
-            <!-- Password -->
-            <div class="input-group mb-4 input-group-md">
-              <span
-                class="input-group-text"
-                id="signup-password"
-                style="width: 40px"
-                ><i class="fa fa-key"></i>
-              </span>
-              <input
-                type="password"
-                class="form-control"
-                name="password"
-                placeholder="Password"
-                aria-label="password"
-                aria-describedby="signup-password"
-                autocomplete="off"
-                value=""
-                required
-              />
-            </div>
-            <!-- Confirmed Password -->
-            <div class="input-group mb-4 input-group-md">
-              <span
-                class="input-group-text"
-                id="signup-cpassword"
-                style="width: 40px"
-                ><i class="fa fa-key"></i>
-              </span>
-              <input
-                type="password"
-                class="form-control"
-                name="confirm-password"
-                placeholder="Confirm Password"
-                aria-label="Password"
-                aria-describedby="signup-cpassword"
-                autocomplete="off"
-                required
-              />
-            </div>
-            <!-- Sign Up Button -->
-            <div class="d-grid gap-2">
-              <button class="btn btn-primary" type="submit">
-                <i class="fa fa-user-plus"></i>&nbsp;Sign Up
-              </button>
-            </div>
-          </form>
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field
+              v-model="username"
+              :rules="usernameRules"
+              label="Username"
+              required
+            ></v-text-field>
+            <v-text-field
+              v-model="displayName"
+              :rules="displayNameRules"
+              label="Display Name"
+              required
+            ></v-text-field>
+            <v-text-field
+              type="password"
+              v-model="password.password"
+              :rules="passwordRules"
+              label="Password"
+              required
+            ></v-text-field>
+            <v-btn
+              :disabled="!valid"
+              color="btn btn-primary"
+              class="btn btn-primary"
+              @click="submit_signup"
+            >
+              Sign Up
+            </v-btn>
+          </v-form>
           <!-- Link to Login -->
           <div class="mt-3">
             Already have an account? <a @click="show = !show">Login</a>
@@ -183,27 +108,53 @@
 </template>
 
 <script>
+import Vue from "vue";
 export default {
-  // reactive state
-  data() {
-    return {
-      show: true,
-    };
-  },
-  // functions that mutate state and trigger updates
+  data: () => ({
+    valid: true,
+    show: true,
+    username: "",
+    displayName: "",
+    password: {
+      password: "",
+      confirm: "",
+    },
+    usernameRules: [(v) => !!v || "Username is required"],
+    displayNameRules: [(v) => !!v || "Display Name is required"],
+    passwordRules: [(v) => !!v || "Password is required"],
+  }),
   methods: {
-    increment() {},
+    async submit_login() {
+      if (this.$refs.form.validate()) {
+        //submit to backend to authenticate
+        let formData = new FormData();
+        formData.append("username", this.username);
+        formData.append("password", this.password);
+        let response = await Vue.axios.post("/api/login", formData);
+        if (response.data.success) {
+          this.$router.push("/");
+        }
+      }
+    },
+    async submit_signup() {
+      if (this.$refs.form.validate()) {
+        //submit to backend to authenticate
+        let formData = new FormData();
+        formData.append("username", this.username);
+        formData.append("displayName", this.displayName);
+        formData.append("password", this.password);
+        let response = await Vue.axios.post("/user/create", formData);
+        if (response.data.success) {
+          this.show = !this.show;
+          this.$router.push("/login");
+        }
+      }
+    },
+    reset() {
+      this.$refs.form.reset();
+    },
   },
-
-  // lifecycle hooks
-  mounted() {},
 };
-
-// Ensure the error message is displayed even if the sign-up form is hidden
-const errorMessage = document.querySelector(".container.error .alert-danger");
-if (errorMessage) {
-  errorMessage.style.display = "block";
-}
 </script>
 
 <style>
