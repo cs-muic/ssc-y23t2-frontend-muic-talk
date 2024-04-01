@@ -20,6 +20,9 @@
               </div>
             </div>
           </div>
+          <div class="alert alert-danger" role="alert" v-show="logInError.show">
+            Failed to Log In: {{ logInError.message }}
+          </div>
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
               v-model="username"
@@ -67,6 +70,13 @@
                 <h2>Sign Up</h2>
               </div>
             </div>
+          </div>
+          <div
+            class="alert alert-danger"
+            role="alert"
+            v-show="signUpError.show"
+          >
+            Failed to Sign Up: {{ signUpError.message }}
           </div>
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
@@ -119,6 +129,14 @@ export default {
       password: "",
       confirm: "",
     },
+    logInError: {
+      message: "",
+      show: false,
+    },
+    signUpError: {
+      message: "",
+      show: false,
+    },
     usernameRules: [(v) => !!v || "Username is required"],
     displayNameRules: [(v) => !!v || "Display Name is required"],
     passwordRules: [(v) => !!v || "Password is required"],
@@ -129,10 +147,16 @@ export default {
         //submit to backend to authenticate
         let formData = new FormData();
         formData.append("username", this.username);
-        formData.append("password", this.password);
+        formData.append("password", this.password.password);
         let response = await Vue.axios.post("/api/login", formData);
         if (response.data.success) {
+          this.logInError.show = false;
+          this.logInError.message = "";
           this.$router.push("/");
+        } else {
+          this.logInError.show = true;
+          this.logInError.message = response.data.message;
+          this.password.password = "";
         }
       }
     },
@@ -142,11 +166,17 @@ export default {
         let formData = new FormData();
         formData.append("username", this.username);
         formData.append("displayName", this.displayName);
-        formData.append("password", this.password);
+        formData.append("password", this.password.password);
         let response = await Vue.axios.post("/user/create", formData);
         if (response.data.success) {
+          this.signUpError.show = false;
+          this.signUpError.message = "";
           this.show = !this.show;
-          this.$router.push("/login");
+          this.displayName = "";
+          this.password.password = "";
+        } else {
+          this.signUpError.show = true;
+          this.signUpError.message = response.data.message;
         }
       }
     },
