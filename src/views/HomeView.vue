@@ -43,8 +43,8 @@
             alt="User profile picture"
           />
           <p>
-            <strong>displayName</strong> <br />
-            username
+            <strong>{{ displayName }}</strong> <br />
+            {{ username }}
           </p>
         </div>
         <div class="pull-right">
@@ -83,14 +83,9 @@
             </td>
             <td style="padding-right: 12px">
               <div class="container-fliud pull-right">
-                <button
-                  class="btn btn-primary btn-w40"
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add-friend"
-                >
+                <v-btn color="primary">
                   <i class="fa fa-plus"></i>
-                </button>
+                </v-btn>
                 <!--Pop up for adding friends-->
                 <div
                   class="modal fade"
@@ -142,9 +137,9 @@
                     </div>
                   </div>
                 </div>
-                <a class="btn btn-primary btn-w40" type="button" href="/"
-                  ><i class="fa fa-pencil"></i
-                ></a>
+                <v-btn color="primary">
+                  <i class="fa fa-pencil"></i>
+                </v-btn>
               </div>
             </td>
           </tr>
@@ -157,11 +152,14 @@
 
 <script>
 import Vue from "vue";
+import VueRouter from "vue-router";
+import store from "../store/index";
+Vue.use(VueRouter);
 export default {
   data: () => ({
     name: "Home",
-    username: "",
-    displayName: "",
+    username: store.state.username,
+    displayName: store.state.name,
     components: {},
   }),
   methods: {
@@ -170,6 +168,13 @@ export default {
       if (response.data.success) {
         this.$router.push("/login");
       }
+    },
+    async mounted() {
+      let response = await Vue.axios.get("/api/whoami");
+      this.username = response.data.username;
+      this.displayName = response.data.displayName;
+      console.log(this.username);
+      console.log(this.displayName);
     },
   },
 };
