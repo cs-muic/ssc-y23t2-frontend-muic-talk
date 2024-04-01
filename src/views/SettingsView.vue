@@ -63,6 +63,7 @@
                   @click="
                     changePassword.show = false;
                     changeDisplayName.show = true;
+                    deleteAccount.show = false;
                   "
                 >
                   <i class="fa fa-user"></i> &nbsp; General
@@ -75,9 +76,23 @@
                   @click="
                     changePassword.show = true;
                     changeDisplayName.show = false;
+                    deleteAccount.show = false;
                   "
                 >
                   <i class="fa fa-key"></i> &nbsp; Password
+                </v-btn>
+              </v-list-item>
+              <v-list-item color="primary">
+                <v-btn
+                  color="primary"
+                  width="100%"
+                  @click="
+                    changePassword.show = false;
+                    changeDisplayName.show = false;
+                    deleteAccount.show = true;
+                  "
+                >
+                  <i class="fa fa-trash"></i> &nbsp; Delete Account
                 </v-btn>
               </v-list-item>
             </v-list>
@@ -151,6 +166,30 @@
                 {{ changePassword.message }}
               </div>
             </v-form>
+            <v-form ref="form" v-show="deleteAccount.show" lazy-validation>
+              <h4>Delete Account</h4>
+              <strong>This action cannot be undone!</strong>
+              <v-text-field
+                v-model="deleteAccount.password"
+                :rules="deleteAccount.passwordRules"
+                label="Confirm Password"
+                required
+              ></v-text-field>
+              <v-btn
+                color="primary"
+                class="btn btn-primary"
+                @click="submit_deleteAccount"
+              >
+                <i class="fa fa-trash"></i> &nbsp; Delete
+              </v-btn>
+              <div
+                class="alert alert-danger mt-5"
+                role="alert"
+                v-show="deleteAccount.error"
+              >
+                {{ deleteAccount.message }}
+              </div>
+            </v-form>
           </v-main>
         </v-layout>
       </v-card>
@@ -185,6 +224,13 @@ export default {
       error: false,
       message: false,
     },
+    deleteAccount: {
+      show: false,
+      password: "",
+      passwordRules: [(v) => !!v || "Password is required"],
+      error: false,
+      message: false,
+    },
   }),
   methods: {
     async logout() {
@@ -194,11 +240,9 @@ export default {
       }
     },
     async submit_displayName() {
-      console.log("Hi? :(");
       let formData = new FormData();
       formData.append("username", this.username);
       formData.append("displayName", this.changeDisplayName.newDisplayName);
-      console.log("Hi! :)");
       let response = await Vue.axios.post("/user/displayName", formData);
       if (response.data.success) {
         this.displayName = this.changeDisplayName.newDisplayName;
@@ -232,6 +276,33 @@ export default {
         this.changePassword.error = true;
         this.changePassword.success = false;
         this.changePassword.message = response.data.message;
+      }
+    },
+    async submit_deleteAccount() {
+      let formData = new FormData();
+      formData.append("username", this.username);
+      formData.append("password", this.deleteAccount.password);
+      let verifyResponse = await Vue.axios.post(
+        "/user/password/verify",
+        formData
+      );
+      if (verifyResponse.data.success) {
+        let logoutResponse = await Vue.axios.get("/api/logout");
+        if (logoutResponse.data.success) {
+          let deleteResponse = await Vue.axios.post("/user/delete", formData);
+          if (deleteResponse.data.success) {
+            this.$router.push("/login");
+          } else {
+            this.deleteAccount.error = true;
+            this.deleteAccount.message = verifyResponse.data.message;
+          }
+        } else {
+          this.deleteAccount.error = true;
+          this.deleteAccount.message = verifyResponse.data.message;
+        }
+      } else {
+        this.deleteAccount.error = true;
+        this.deleteAccount.message = verifyResponse.data.message;
       }
     },
   },
