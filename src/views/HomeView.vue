@@ -1,8 +1,8 @@
 <style>
-@import "../main/webapp/styles/styles.css";
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
+@import "../main/webapp/styles/styles.css";
 </style>
 
 <template>
@@ -11,20 +11,26 @@
       <div class="container-fluid">
         <a class="navbar-brand"><strong>MUIC Talk</strong></a>
         <div>
-          <router-link to="/"
-            ><i class="fa fa-home"></i> &nbsp; Home</router-link
-          >
-          <router-link to="/schedule"
-            ><i class="fa fa-calendar"></i> &nbsp; Schedule</router-link
-          >
-          <router-link to="/schedule"
-            ><i class="fa fa-comments"></i> &nbsp; Chats</router-link
-          >
+          <router-link to="/">
+            <v-btn color="primary">
+              <i class="fa fa-home"> &nbsp; Home</i>
+            </v-btn>
+          </router-link>
+          <router-link to="/schedule">
+            <v-btn color="primary">
+              <i class="fa fa-calendar"> &nbsp; Schedule</i>
+            </v-btn>
+          </router-link>
+          <router-link to="/chat">
+            <v-btn color="primary">
+              <i class="fa fa-comments"> &nbsp; Chats</i>
+            </v-btn>
+          </router-link>
         </div>
         <div>
-          <a class="btn btn-primary btn-w40" @click="logout"
-            ><i class="fa fa-sign-out"></i
-          ></a>
+          <v-btn color="primary" @click="logout">
+            <i class="fa fa-sign-out"></i>
+          </v-btn>
         </div>
       </div>
     </nav>
@@ -42,9 +48,10 @@
           </p>
         </div>
         <div class="pull-right">
-          <a class="btn btn-primary btn-w40" type="button" href="/user/edit"
-            ><i class="fa fa-cog"></i
-          ></a>
+          <v-btn color="primary" class="btn btn-primary">
+            <!--This should go to user edit page-->
+            <i class="fa fa-cog"></i>
+          </v-btn>
         </div>
       </div>
     </nav>
@@ -60,12 +67,12 @@
             </td>
             <td style="padding-right: 12px">
               <div class="container-fliud pull-right">
-                <a class="btn btn-primary btn-w40" type="button" href="/"
-                  ><i class="fa fa-plus"></i
-                ></a>
-                <a class="btn btn-primary btn-w40" type="button" href="/"
-                  ><i class="fa fa-pencil"></i
-                ></a>
+                <v-btn color="primary" class="btn-w40">
+                  <i class="fa fa-plus"></i>
+                </v-btn>
+                <v-btn color="primary" class="btn-w40">
+                  <i class="fa fa-pencil"></i>
+                </v-btn>
               </div>
             </td>
           </tr>
