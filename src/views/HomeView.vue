@@ -2,6 +2,7 @@
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
+@import "@mdi/font/css/materialdesignicons.css";
 @import "../main/webapp/styles/styles.css";
 </style>
 
@@ -84,26 +85,32 @@
             </td>
             <td style="padding-right: 12px">
               <div class="container-fliud pull-right">
-                <v-btn color="primary" @click="addFriends = !addFriends">
-                  <i class="fa fa-plus"></i>
-                </v-btn>
-                <div class="modal" tabindex="-1" v-if="addFriends === true">
-                  <div class="modal-dialog w-50">
-                    <div class="modal-content">
-                      <header class="modal-header">
-                        <slot name="header">
-                          <strong> Add Friends! </strong>
-                        </slot>
-                        <button
-                          type="button"
-                          class="btn-close"
-                          @click="addFriends = !addFriends"
-                        ></button>
-                      </header>
+                <template>
+                  <v-dialog v-model="dialog" max-width="500">
+                    <template v-slot:activator="{ props: activatorProps }">
+                      <v-btn
+                        color="primary"
+                        v-bind="activatorProps"
+                        @click="dialog = true"
+                        ><i class="fa fa-plus"></i
+                      ></v-btn>
+                    </template>
 
-                      <section class="modal-body my-4">
-                        <slot name="body">
-                          <div class="row">
+                    <v-card>
+                      <v-card-title
+                        class="d-flex justify-space-between align-center"
+                      >
+                        Add Friends!
+                        <v-btn color="primary" @click="dialog = false">
+                          <i class="fa fa-close"></i>
+                        </v-btn>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-row dense>
+                          <div class="row ml-2 px-2">
+                            <div class="col col-md-auto mt-6">
+                              <i class="fa fa-user"></i>
+                            </div>
                             <div class="col">
                               <v-form id="add-friend-form" lazy-validation>
                                 <v-text-field
@@ -124,12 +131,11 @@
                               </v-btn>
                             </div>
                           </div>
-                        </slot>
-                      </section>
-                    </div>
-                  </div>
-                </div>
-                <!--Pop up for adding friends-->
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+                </template>
                 <v-btn color="primary">
                   <i class="fa fa-pencil"></i>
                 </v-btn>
@@ -155,6 +161,7 @@ export default {
     displayName: store.state.name,
     friendUser: "",
     addFriends: false,
+    dialog: false,
     components: {},
   }),
   methods: {
@@ -163,11 +170,6 @@ export default {
       if (response.data.success) {
         this.$router.push("/login");
       }
-    },
-    showAddFriends() {
-      console.log("Show add friends" + this.addFriends);
-      this.addFriends = !this.addFriends;
-      console.log("Show add friends" + this.addFriends);
     },
     async sendFriendReq() {
       let formData = new FormData();

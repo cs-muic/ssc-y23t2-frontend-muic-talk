@@ -10,6 +10,9 @@ module.exports = defineConfig({
       "/api": {
         target: "http://localhost:8081",
       },
+      "/user": {
+        target: "http://localhost:8081",
+      },
     },
     headers: {
       "Access-Control-Allow-Origin": "*",
