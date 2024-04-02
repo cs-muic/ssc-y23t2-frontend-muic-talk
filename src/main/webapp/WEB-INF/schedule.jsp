@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -51,26 +51,35 @@
     <div class="row mt-4">
         <div class="col-md-6">
             <h3>Add Event</h3>
-            <div>
-                <label for="event-name">Event Name:</label>
-                <input type="text" id="event-name" name="eventName" class="form-control" required>
-            </div>
-            <div class="mt-3">
-                <label for="event-date">Event Date:</label>
-                <input type="date" id="event-date" name="eventDate" class="form-control" required>
-            </div>
-            <div class="mt-3">
-                <label for="event-time">Event Time:</label>
-                <input type="time" id="event-time" name="eventTime" class="form-control" required>
-            </div>
-            <div class="mt-3">
-                <button class="btn btn-primary" onclick="addEvent()">Add Event</button>
-            </div>
+            <form action="/schedule" method="post">
+                <div>
+                    <label for="event-name">Event Name:</label>
+                    <input type="text" id="event-name" name="eventName" class="form-control" required>
+                </div>
+                <div class="mt-3">
+                    <label for="event-date">Event Date:</label>
+                    <input type="date" id="event-date" name="eventDate" class="form-control" required>
+                </div>
+                <div class="mt-3">
+                    <label for="event-time">Event Time:</label>
+                    <input type="time" id="event-time" name="eventTime" class="form-control" required>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary" onclick="addEvent()">Add Event</button>
+                </div>
+            </form>
         </div>
+
         <div class="col-md-6">
             <h3>All Events</h3>
             <div id="all-events">
                 <!-- All events will be displayed here -->
+                <!-- Display existing events fetched from the database -->
+                <c:forEach var="event" items="${userSchedule}">
+                    <div class="event">
+                        <strong>${event.name}</strong> - ${event.dateTime}
+                    </div>
+                </c:forEach>
             </div>
         </div>
     </div>
@@ -102,65 +111,27 @@
 <script>
     var events = []; // Array to store all events
 
-    function fetchEvents() {
-        // Fetch events from the server
-        fetch('/api/events')
-            .then(response => response.json())
-            .then(events => {
-                // Update the events array with the fetched events
-                window.events = events;
-                // Display all events
-                displayAllEvents();
-                // Update weekly schedule display
-                displayWeeklySchedule();
-            })
-            .catch(error => console.error('Error fetching events:', error));
-    }
-
     function addEvent() {
         var eventName = document.getElementById('event-name').value;
         var eventDate = new Date(document.getElementById('event-date').value);
         var eventTime = document.getElementById('event-time').value;
-
         // Combine date and time to create a single DateTime object
         var eventDateTime = new Date(eventDate.toDateString() + ' ' + eventTime);
-
+        var m = eventDate.getMonth() + 1;
         if (eventName && eventDateTime) {
             var event = {
                 name: eventName,
                 dateTime: eventDateTime
             };
-
-            // Add event to the events array
-            events.push(event);
-
-            // Display all events
-            displayAllEvents();
-
-            // Update weekly schedule display
-            displayWeeklySchedule();
-
-            // Send the new event data to the server
-            fetch('/api/events', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(event)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to add event');
-                    }
-                })
-                .catch(error => console.error('Error adding event:', error));
+            events.push(event); // Add event to the events array
+            var eventHtml = '<div class="event"><strong>' + eventName + '</strong> - ' + m + '</strong>/'+ eventDate.getDate() + '</strong>/'+ eventDate.getFullYear() + '</strong> at ' + formatTime(eventDateTime) +
+                '<button class="btn btn-danger btn-sm delete-btn" onclick="deleteEvent(' + (events.length - 1) + ')"><i class="fa fa-close"></i></button></div>';
+            document.getElementById('all-events').insertAdjacentHTML('beforeend', eventHtml);
+            displayWeeklySchedule(); // Update weekly schedule display
         } else {
             alert('Please fill out all fields.');
         }
     }
-
-    // Initial fetch of events when the page loads
-    // fetchEvents();
 
     function formatTime(dateTime) {
         var hour = dateTime.getHours();
@@ -173,10 +144,10 @@
 
     function displayWeeklySchedule() {
         var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
         var scheduleHtml = '';
         var currentDate = new Date(); // Get the current date and time
-
+        // Set the current date to the start of the week (Sunday)
+        currentDate.setDate(currentDate.getDate() - currentDate.getDay());
         for (var hour = 0; hour < 24; hour++) {
             scheduleHtml += '<tr>';
             scheduleHtml += '<td>' + formatHour(hour) + '</td>'; // Display hour
@@ -198,14 +169,13 @@
                 });
 
                 scheduleHtml += '<td>' + eventsHtml + '</td>';
+
             }
 
             scheduleHtml += '</tr>';
         }
-
         document.getElementById('weekly-schedule').innerHTML = scheduleHtml;
     }
-
 
     function deleteEvent(index) {
         events.splice(index, 1); // Remove event from the events array
@@ -225,7 +195,6 @@
         });
         document.getElementById('all-events').innerHTML = allEventsHtml;
     }
-
 
     function formatHour(hour) {
         if (hour < 10) {
