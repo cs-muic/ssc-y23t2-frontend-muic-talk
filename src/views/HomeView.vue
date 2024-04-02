@@ -158,7 +158,11 @@
               </div>
             </td>
           </tr>
-          <tr style="height: 100px"></tr>
+          <tr style="height: 100px">
+            <v-btn color="primary" @click="getFriendReqs">
+              Test friend requests
+            </v-btn>
+          </tr>
         </table>
       </div>
     </div>
@@ -199,12 +203,20 @@ export default {
       if (response.data.success) {
         this.addFriends.toAdd = "";
         this.addFriends.success = true;
+        this.addFriends.error = false;
         this.addFriends.message = response.data.message;
       } else {
         this.addFriends.error = true;
         this.addFriends.success = false;
         this.addFriends.message = response.data.message;
       }
+    },
+    async getFriendReqs() {
+      let formData = new FormData();
+      formData.append("username", this.username);
+      let response = await Vue.axios.post("/user/requests", formData);
+      console.log(response.data.success);
+      console.log(response.data.request);
     },
   },
 };
