@@ -178,10 +178,26 @@
               </div>
             </td>
           </tr>
-          <tr style="height: 100px">
-            <v-btn color="primary" @click="getFriendReqs">
-              Test friend requests
-            </v-btn>
+          <tr class="container container-fluid">
+            <td colspan="100%">
+              <v-data-table
+                style="width: 100%"
+                fill-width
+                :headers="friends.headers"
+                :items="friends.actions"
+              >
+                <template v-slot:item="row">
+                  <tr>
+                    <td>{{ row.item.username.string }}</td>
+                    <td width="100">
+                      <v-btn dark small color="primary">
+                        <i class="fa fa-comment"></i>
+                      </v-btn>
+                    </td>
+                  </tr>
+                </template>
+              </v-data-table>
+            </td>
           </tr>
         </table>
       </div>
@@ -211,6 +227,13 @@ export default {
         { text: "Request", value: "" },
       ],
       showRequests: false,
+    },
+    friends: {
+      friends: [],
+      headers: [
+        { text: "Username", value: "username" },
+        { text: "Action", value: "" },
+      ],
     },
     components: {},
   }),
