@@ -90,7 +90,7 @@
                       <v-btn
                         color="primary"
                         v-bind="activatorProps"
-                        @click="addFriends.dialog = true"
+                        @click="friendsModal"
                         ><i class="fa fa-plus"></i
                       ></v-btn>
                     </template>
@@ -100,10 +100,7 @@
                         class="d-flex justify-space-between align-center"
                       >
                         Add Friends!
-                        <v-btn
-                          color="primary"
-                          @click="addFriends.dialog = false"
-                        >
+                        <v-btn color="primary" @click="friendsModal">
                           <i class="fa fa-close"></i>
                         </v-btn>
                       </v-card-title>
@@ -147,6 +144,29 @@
                           >
                             {{ addFriends.message }}
                           </div>
+                          <v-data-table
+                            :headers="addFriends.headers"
+                            :items="addFriends.requests"
+                            v-show="addFriends.showRequests"
+                          >
+                            <template v-slot:item="row">
+                              <tr>
+                                <td>{{ row.item.username.string }}</td>
+                                <td width="100">
+                                  <v-btn
+                                    dark
+                                    small
+                                    color="primary"
+                                    @click="
+                                      acceptFriendReq(row.item.username.string)
+                                    "
+                                  >
+                                    <i class="fa fa-check"></i>
+                                  </v-btn>
+                                </td>
+                              </tr>
+                            </template>
+                          </v-data-table>
                         </v-row>
                       </v-card-text>
                     </v-card>
@@ -185,6 +205,12 @@ export default {
       error: false,
       success: false,
       message: "",
+      requests: [],
+      headers: [
+        { text: "Username", value: "username" },
+        { text: "Request", value: "" },
+      ],
+      showRequests: false,
     },
     components: {},
   }),
@@ -194,6 +220,10 @@ export default {
       if (response.data.success) {
         this.$router.push("/login");
       }
+    },
+    async friendsModal() {
+      this.addFriends.dialog = !this.addFriends.dialog;
+      await this.getFriendReqs();
     },
     async sendFriendReq() {
       let formData = new FormData();
@@ -215,8 +245,22 @@ export default {
       let formData = new FormData();
       formData.append("username", this.username);
       let response = await Vue.axios.post("/user/requests", formData);
+      if (response.data.success && response.data.request) {
+        this.addFriends.requests = response.data.friends;
+        this.addFriends.requests
+          .map(({ username }) => username.string)
+          .join(", ");
+        this.addFriends.showRequests = response.data.request;
+      }
+    },
+    async acceptFriendReq(toAccept) {
+      let formData = new FormData();
+      console.log(toAccept, this.username);
+      formData.append("username", this.username);
+      formData.append("userToAdd", toAccept);
+      let response = await Vue.axios.post("/user/accept", formData);
       console.log(response.data.success);
-      console.log(response.data.request);
+      await this.getFriendReqs();
     },
   },
 };
