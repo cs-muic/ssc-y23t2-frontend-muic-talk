@@ -184,7 +184,7 @@
                 style="width: 100%"
                 fill-width
                 :headers="friends.headers"
-                :items="friends.actions"
+                :items="friends.friends"
               >
                 <template v-slot:item="row">
                   <tr>
@@ -210,6 +210,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store/index";
 Vue.use(VueRouter);
+
 export default {
   data: () => ({
     name: "Home",
@@ -281,10 +282,23 @@ export default {
       console.log(toAccept, this.username);
       formData.append("username", this.username);
       formData.append("userToAdd", toAccept);
-      let response = await Vue.axios.post("/user/accept", formData);
-      console.log(response.data.success);
+      await Vue.axios.post("/user/accept", formData);
       await this.getFriendReqs();
+      await this.getFriends();
     },
+    async getFriends() {
+      let formData = new FormData();
+      formData.append("username", store.state.username);
+      let response = await Vue.axios.post("/user/friends", formData);
+      if (response.data.success) {
+        this.friends.friends = response.data.friends;
+        this.friends.friends.map(({ username }) => username.string).join(", ");
+        this.friends.showRequests = response.data.request;
+      }
+    },
+  },
+  async mounted() {
+    await this.getFriends();
   },
 };
 </script>
