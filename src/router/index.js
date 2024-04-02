@@ -34,6 +34,11 @@ const routes = [
     name: "settings",
     component: () => import("../views/SettingsView.vue"),
   },
+  {
+    path: "/schedule",
+    name: "schedule",
+    component: () => import("../views/ScheduleView.vue"),
+  },
 ];
 
 const router = new VueRouter({
