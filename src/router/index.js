@@ -39,6 +39,11 @@ const routes = [
     name: "schedule",
     component: () => import("../views/ScheduleView.vue"),
   },
+  {
+    path: "/chat",
+    name: "chat",
+    component: () => import("../views/ChatView.vue"),
+  },
 ];
 
 const router = new VueRouter({
