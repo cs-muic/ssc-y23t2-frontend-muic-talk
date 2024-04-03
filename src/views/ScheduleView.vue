@@ -69,19 +69,26 @@
         <h3>All Events</h3>
         <div id="all-events">
           <!-- All events will be displayed here -->
-          <div v-for="event in events" :key="event.id" class="event">
-            <strong>{{ event.name.string }}</strong> -
-            {{ new Date(event.date.string).toLocaleDateString() }}
-            at
-            {{
-              new Date(event.date.string).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            }}
+          <div
+            v-for="event in events"
+            :key="event.id"
+            class="event"
+            style="height: 45px"
+          >
+            <p class="mt-1">
+              <strong>{{ event.name.string }}</strong> -
+              {{ new Date(event.date.string).toLocaleDateString() }}
+              at
+              {{
+                new Date(event.date.string).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              }}
+            </p>
             <button
               class="btn btn-danger btn-sm delete-btn"
-              @click="deleteEvent(event.id)"
+              @click="deleteEvent(event.id.string)"
             >
               <i class="fa fa-close"></i>
             </button>
@@ -180,6 +187,7 @@ export default {
         if (response.data.success) {
           console.log(response.data.events);
           this.events = response.data.events;
+          this.events.map(({ id }) => id.string).join(", ");
           this.events.map(({ name }) => name.string).join(", ");
           this.events.map(({ date }) => date.string).join(", ");
           console.log(this.events);
@@ -190,9 +198,11 @@ export default {
     },
     async deleteEvent(eventId) {
       try {
-        console.log(eventId);
-        let response = await this.axios.delete("/schedule/" + eventId);
-        if (response.ok) {
+        let formData = new FormData();
+        formData.append("username", this.username);
+        formData.append("eventId", eventId);
+        let response = await this.axios.post("/user/events/delete", formData);
+        if (response.data.success) {
           this.fetchEvents(); // Refresh events after deleting
           this.displayWeeklySchedule(); // Update weekly schedule display
         } else {

@@ -178,6 +178,10 @@
               <v-data-table
                 style="width: 100%"
                 fill-width
+                :footer-props="{
+                  'items-per-page-options': [10],
+                }"
+                :items-per-page="10"
                 :headers="groups.headers"
                 :items="groups.groups"
               >
@@ -278,6 +282,10 @@
                           <v-data-table
                             :headers="addFriends.headers"
                             :items="addFriends.requests"
+                            :footer-props="{
+                              'items-per-page-options': [10],
+                            }"
+                            :items-per-page="10"
                             v-show="addFriends.showRequests"
                           >
                             <template v-slot:item="row">
@@ -314,6 +322,10 @@
               <v-data-table
                 style="width: 100%"
                 fill-width
+                :footer-props="{
+                  'items-per-page-options': [10],
+                }"
+                :items-per-page="10"
                 :headers="friends.headers"
                 :items="friends.friends"
               >
@@ -374,7 +386,7 @@ export default {
       requests: [],
       headers: [
         { text: "Username", value: "username" },
-        { text: "Request", value: "" },
+        { text: "", value: "" },
       ],
       showRequests: false,
     },
@@ -382,7 +394,7 @@ export default {
       friends: [],
       headers: [
         { text: "Username", value: "username" },
-        { text: "Action", value: "" },
+        { text: "", value: "" },
       ],
       edit: false,
     },
@@ -395,7 +407,7 @@ export default {
       groups: [],
       headers: [
         { text: "Group Name", value: "name" },
-        { text: "Action", value: "" },
+        { text: "", value: "" },
       ],
       edit: false,
     },
