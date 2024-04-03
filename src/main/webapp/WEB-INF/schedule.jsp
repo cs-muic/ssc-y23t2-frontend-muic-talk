@@ -76,8 +76,11 @@
                 <!-- All events will be displayed here -->
                 <!-- Display existing events fetched from the database -->
                 <c:forEach var="event" items="${userSchedule}">
-                    <div class="event">
+                    <div class="event" id="event-${event.id}">
                         <strong>${event.name}</strong> - ${event.dateTime}
+                        <button class="btn btn-danger btn-sm delete-btn" onclick="deleteEvent(${event.id})">
+                            <i class="fa fa-close"></i>
+                        </button>
                     </div>
                 </c:forEach>
             </div>
@@ -109,29 +112,38 @@
 </div>
 
 <script>
-    var events = []; // Array to store all events
+    var events = [];
 
-    function addEvent() {
-        var eventName = document.getElementById('event-name').value;
-        var eventDate = new Date(document.getElementById('event-date').value);
-        var eventTime = document.getElementById('event-time').value;
-        // Combine date and time to create a single DateTime object
-        var eventDateTime = new Date(eventDate.toDateString() + ' ' + eventTime);
-        var m = eventDate.getMonth() + 1;
-        if (eventName && eventDateTime) {
-            var event = {
-                name: eventName,
-                dateTime: eventDateTime
-            };
-            events.push(event); // Add event to the events array
-            var eventHtml = '<div class="event"><strong>' + eventName + '</strong> - ' + m + '</strong>/'+ eventDate.getDate() + '</strong>/'+ eventDate.getFullYear() + '</strong> at ' + formatTime(eventDateTime) +
-                '<button class="btn btn-danger btn-sm delete-btn" onclick="deleteEvent(' + (events.length - 1) + ')"><i class="fa fa-close"></i></button></div>';
-            document.getElementById('all-events').insertAdjacentHTML('beforeend', eventHtml);
-            displayWeeklySchedule(); // Update weekly schedule display
-        } else {
-            alert('Please fill out all fields.');
-        }
-    }
+    <c:forEach var="event" items="${userSchedule}">
+    var eventObject = {
+        id: "${event.id}",
+        name: "${event.name}",
+        dateTime: new Date("${event.dateTime}")
+    };
+    events.push(eventObject);
+    </c:forEach>
+
+    // function addEvent() {
+    //     var eventName = document.getElementById('event-name').value;
+    //     var eventDate = new Date(document.getElementById('event-date').value);
+    //     var eventTime = document.getElementById('event-time').value;
+    //     // Combine date and time to create a single DateTime object
+    //     var eventDateTime = new Date(eventDate.toDateString() + ' ' + eventTime);
+    //     var m = eventDate.getMonth() + 1;
+    //     if (eventName && eventDateTime) {
+    //         var event = {
+    //             name: eventName,
+    //             dateTime: eventDateTime
+    //         };
+    //         events.push(event); // Add event to the events array
+    //         var eventHtml = '<div class="event"><strong>' + eventName + '</strong> - ' + m + '</strong>/'+ eventDate.getDate() + '</strong>/'+ eventDate.getFullYear() + '</strong> at ' + formatTime(eventDateTime) +
+    //             '<button class="btn btn-danger btn-sm delete-btn" onclick="deleteEvent(' + (events.length - 1) + ')"><i class="fa fa-close"></i></button></div>';
+    //         document.getElementById('all-events').insertAdjacentHTML('beforeend', eventHtml);
+    //         displayWeeklySchedule(); // Update weekly schedule display
+    //     } else {
+    //         alert('Please fill out all fields.');
+    //     }
+    // }
 
     function formatTime(dateTime) {
         var hour = dateTime.getHours();
@@ -156,15 +168,21 @@
                 var currentDateTime = new Date(currentDate); // Create a copy of the current date and time
                 currentDateTime.setDate(currentDateTime.getDate() + day); // Add day offset
 
-                var eventsOnDay = events.filter(function(event) {
-                    return event.dateTime.getHours() === hour &&
-                        event.dateTime.getDate() === currentDateTime.getDate() &&
-                        event.dateTime.getMonth() === currentDateTime.getMonth() &&
-                        event.dateTime.getFullYear() === currentDateTime.getFullYear();
+                // console.log("Current Date:", currentDateTime);
+
+                var eventsOnDay = events.filter(function (event) {
+                    // Parse event.dateTime into a Date object
+                    var eventDateTime = new Date(event.dateTime);
+
+                    return eventDateTime.getHours() === hour &&
+                        eventDateTime.getDate() === currentDateTime.getDate() &&
+                        eventDateTime.getMonth() === currentDateTime.getMonth() &&
+                        eventDateTime.getFullYear() === currentDateTime.getFullYear();
                 });
+                // console.log("Events on Day:", eventsOnDay);
 
                 var eventsHtml = '';
-                eventsOnDay.forEach(function(event) {
+                eventsOnDay.forEach(function (event) {
                     eventsHtml += '<div><strong>' + event.name + '</strong> at ' + formatTime(event.dateTime) + '</div>';
                 });
 
@@ -177,21 +195,44 @@
         document.getElementById('weekly-schedule').innerHTML = scheduleHtml;
     }
 
-    function deleteEvent(index) {
-        events.splice(index, 1); // Remove event from the events array
-        displayAllEvents(); // Update events display
-        displayWeeklySchedule(); // Update weekly schedule display
+    function deleteEvent(eventId) {
+        // Remove event from the events array
+        events = events.filter(event => event.id !== eventId);
+
+        // Update events display
+        displayAllEvents();
+
+        // Update weekly schedule display
+        displayWeeklySchedule();
+
+        // Send DELETE request to the backend
+        fetch(`/schedule?eventId=${eventId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Event successfully deleted
+                    console.log('Event deleted successfully');
+                } else {
+                    // Failed to delete event
+                    console.error('Failed to delete event');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 
     function displayAllEvents() {
         var allEventsHtml = '';
-        events.forEach(function(event, index) {
+        events.forEach(function (event) {
             var eventDateTime = new Date(event.dateTime); // Convert dateTime to Date object
             var eventName = event.name;
+            var eventID = event.id;
             var eventTime = formatTime(eventDateTime); // Format dateTime to display time
             var eventDate = eventDateTime.getDate() + '/' + (eventDateTime.getMonth() + 1) + '/' + eventDateTime.getFullYear(); // Format dateTime to display date
             allEventsHtml += '<div class="event"><strong>' + eventName + '</strong> - ' + eventDate + ' at ' + eventTime +
-                '<button class="btn btn-danger btn-sm delete-btn" onclick="deleteEvent(' + index + ')"><i class="fa fa-close"></i></button></div>';
+                '<button class="btn btn-danger btn-sm delete-btn" name = "eventId" onclick="deleteEvent(\'' + eventID + '\')"><i class="fa fa-close"></i></button></div>';
         });
         document.getElementById('all-events').innerHTML = allEventsHtml;
     }
