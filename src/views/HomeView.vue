@@ -65,81 +65,151 @@
           <tr style="vertical-align: middle">
             <td>
               <h3><strong>Groups</strong></h3>
-              <!-- Existing buttons for group management -->
-              <v-btn color="primary" class="btn-w40">
-                <i class="fa fa-plus"></i>
-              </v-btn>
-              <v-btn color="primary" class="btn-w40">
-                <i class="fa fa-pencil"></i>
-              </v-btn>
-
-              <!-- Button to open join group dialog -->
-              <v-btn color="primary" @click="joinGroupDialog = true">
-                Join Group
-              </v-btn>
-
-              <!-- Join Group Dialog -->
-              <v-dialog v-model="joinGroupDialog">
-                <v-card>
-                  <v-card-title>Join Group</v-card-title>
-                  <v-card-text>
-                    <v-text-field
-                      label="Enter Group ID"
-                      v-model="groupIdToJoin"
-                    ></v-text-field>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-btn color="primary" @click="joinGroup">Join</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-
-              <!-- Button to open create group dialog -->
-              <v-btn color="secondary" @click="createGroupDialog = true">
-                Create Group
-              </v-btn>
-
-              <!-- Create Group Dialog -->
-              <v-dialog v-model="createGroupDialog">
-                <v-card>
-                  <v-card-title>Create New Group</v-card-title>
-                  <v-card-text>
-                    <v-text-field
-                      label="Group Name"
-                      v-model="newGroupName"
-                    ></v-text-field>
-                    <!-- Include other fields as necessary -->
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-btn color="secondary" @click="createGroup">Create</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-
-              <div>
-                <h2>Groups</h2>
-                <ul>
-                  <li v-for="group in groups" :key="group.id">
-                    {{ group.name }}
-                  </li>
-                </ul>
-              </div>
             </td>
-
             <td style="padding-right: 12px">
               <div class="container-fliud pull-right">
-                <v-btn color="primary" class="btn-w40">
-                  <i class="fa fa-plus"></i>
-                </v-btn>
+                <template>
+                  <v-dialog v-model="joinGroupDialog" max-width="500">
+                    <template v-slot:activator="{ props: activatorProps }">
+                      <!-- Button to open join group dialog -->
+                      <v-btn
+                        color="primary"
+                        v-bind="activatorProps"
+                        @click="joinGroupDialog = true"
+                      >
+                        Join
+                      </v-btn>
+                    </template>
 
-                <v-btn color="primary" class="btn-w40">
+                    <!-- Join Group Dialog -->
+                    <v-card>
+                      <v-card-title
+                        class="d-flex justify-space-between align-center"
+                      >
+                        Join Group
+                        <v-btn color="primary" @click="joinGroupDialog = false">
+                          <i class="fa fa-close"></i>
+                        </v-btn>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-row dense>
+                          <div class="row ml-2 px-2">
+                            <div class="col col-md-auto mt-6">
+                              <i class="fa fa-users"></i>
+                            </div>
+                            <div class="col">
+                              <v-text-field
+                                label="Enter Group ID"
+                                v-model="groupIdToJoin"
+                              ></v-text-field>
+                            </div>
+                            <div class="col col-md-auto">
+                              <v-btn
+                                class="mt-3"
+                                color="primary"
+                                @click="joinGroup"
+                                >Join</v-btn
+                              >
+                            </div>
+                          </div>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+                </template>
+                <template>
+                  <v-dialog v-model="createGroupDialog" max-width="500">
+                    <template v-slot:activator="{ props: activatorProps }">
+                      <!-- Button to open create group dialog -->
+                      <v-btn
+                        color="primary"
+                        v-bind="activatorProps"
+                        @click="createGroupDialog = true"
+                      >
+                        Create
+                      </v-btn>
+                    </template>
+
+                    <!-- Create Group Dialog -->
+                    <v-card>
+                      <v-card-title
+                        class="d-flex justify-space-between align-center"
+                        >Create New Group
+                        <v-btn
+                          color="primary"
+                          @click="createGroupDialog = false"
+                        >
+                          <i class="fa fa-close"></i></v-btn
+                      ></v-card-title>
+                      <v-card-text>
+                        <v-row dense>
+                          <div class="row ml-2 px-2">
+                            <div class="col col-md-auto mt-6">
+                              <i class="fa fa-users"></i>
+                            </div>
+                            <div class="col">
+                              <v-text-field
+                                label="Group Name"
+                                v-model="newGroupName"
+                              ></v-text-field>
+                            </div>
+                            <div class="col col-md-auto">
+                              <v-btn
+                                class="mt-3"
+                                color="primary"
+                                @click="createGroup"
+                                >Create</v-btn
+                              >
+                            </div>
+                          </div>
+                        </v-row>
+                        <!-- Include other fields as necessary -->
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+                </template>
+                <v-btn color="primary" @click="groups.edit = !groups.edit">
                   <i class="fa fa-pencil"></i>
                 </v-btn>
               </div>
             </td>
           </tr>
-
-          <tr style="height: 100px"></tr>
+          <tr class="container container-fluid">
+            <td colspan="100%">
+              <v-data-table
+                style="width: 100%"
+                fill-width
+                :headers="groups.headers"
+                :items="groups.groups"
+              >
+                <template v-slot:item="row">
+                  <tr>
+                    <td>{{ row.item.name.string }}</td>
+                    <td width="200">
+                      <v-btn
+                        dark
+                        small
+                        color="primary"
+                        v-if="groups.edit === false"
+                      >
+                        <i class="fa fa-comment"></i>
+                      </v-btn>
+                      <v-btn
+                        dark
+                        small
+                        color="error"
+                        v-else
+                        @click="deleteGroup(row.item.name.string)"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </v-btn>
+                    </td>
+                  </tr>
+                </template>
+              </v-data-table>
+            </td>
+          </tr>
+          <!-- Friends -->
           <tr style="vertical-align: middle">
             <td>
               <h3><strong>Friends</strong></h3>
@@ -322,7 +392,14 @@ export default {
       userId: "",
       groupId: "",
     },
-    groups: [],
+    groups: {
+      groups: [],
+      headers: [
+        { text: "Group Name", value: "name" },
+        { text: "Action", value: "" },
+      ],
+      edit: false,
+    },
     components: {},
   }),
   methods: {
@@ -413,24 +490,24 @@ export default {
       await this.getFriendReqs();
       await this.getFriends();
     },
+    async createGroup() {
+      try {
+        // Assume you have a function to call your API to create the group
+        await this.axios.post("/api/groups/create", {
+          name: this.newGroupName,
+        });
+        alert("Group created successfully!");
+        this.createGroupDialog = false; // Close the dialog
+        this.newGroupName = ""; // Reset input
+      } catch (error) {
+        console.error("Failed to create group:", error);
+        alert("Failed to create group.");
+      }
+    },
   },
   async mounted() {
     await this.getFriends();
     await this.fetchGroups();
-  },
-  async createGroup() {
-    try {
-      // Assume you have a function to call your API to create the group
-      await this.axios.post("/api/groups/create", {
-        name: this.newGroupName,
-      });
-      alert("Group created successfully!");
-      this.createGroupDialog = false; // Close the dialog
-      this.newGroupName = ""; // Reset input
-    } catch (error) {
-      console.error("Failed to create group:", error);
-      alert("Failed to create group.");
-    }
   },
 };
 </script>
