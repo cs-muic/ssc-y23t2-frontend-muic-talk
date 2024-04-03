@@ -201,7 +201,7 @@
                       <v-btn
                         dark
                         small
-                        color="primary"
+                        color="error"
                         v-else
                         @click="deleteFriend(row.item.username.string)"
                       >

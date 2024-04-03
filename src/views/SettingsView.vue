@@ -82,9 +82,9 @@
                   <i class="fa fa-key"></i> &nbsp; Password
                 </v-btn>
               </v-list-item>
-              <v-list-item color="primary">
+              <v-list-item>
                 <v-btn
-                  color="primary"
+                  color="error"
                   width="100%"
                   @click="
                     changePassword.show = false;
@@ -176,7 +176,7 @@
                 required
               ></v-text-field>
               <v-btn
-                color="primary"
+                color="error"
                 class="btn btn-primary"
                 @click="submit_deleteAccount"
               >
