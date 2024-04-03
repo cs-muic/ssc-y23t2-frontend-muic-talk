@@ -38,7 +38,7 @@
     <div class="row mt-4">
       <div class="col-md-6">
         <h3>Add Event</h3>
-        <form @submit.prevent="addEvent">
+        <v-form @submit.prevent="addEvent">
           <div>
             <label for="event-name">Event Name:</label>
             <input type="text" id="event-name" v-model="newEventName" class="form-control" required>
@@ -52,9 +52,9 @@
             <input type="time" id="event-time" v-model="newEventTime" class="form-control" required>
           </div>
           <div class="mt-3">
-            <button type="submit" class="btn btn-primary">Add Event</button>
+            <v-btn type="submit" color="primary">Add Event</v-btn>
           </div>
-        </form>
+        </v-form>
       </div>
 
       <div class="col-md-6">
@@ -63,9 +63,9 @@
           <!-- All events will be displayed here -->
           <div v-for="event in events" :key="event.id" class="event">
             <strong>{{ event.name }}</strong> - {{ event.dateTime }}
-            <button class="btn btn-danger btn-sm delete-btn" @click="deleteEvent(event.id)">
+            <v-btn class="btn btn-danger btn-sm delete-btn" @click="deleteEvent(event.id)">
               <i class="fa fa-close"></i>
-            </button>
+            </v-btn>
           </div>
         </div>
       </div>
