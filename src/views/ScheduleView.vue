@@ -95,7 +95,7 @@ export default {
   methods: {
     async logout() {
       try {
-        let response = await this.$axios.get("/api/logout");
+        let response = await this.axios.get("/api/logout");
         if (response.data.success) {
           this.$router.push("/login");
         }
@@ -105,7 +105,7 @@ export default {
     },
     async addEvent() {
       try {
-        let response = await this.$axios.post("/schedule", {
+        let response = await this.axios.post("/schedule", {
           eventName: this.newEventName,
           eventDate: this.newEventDate,
           eventTime: this.newEventTime
@@ -122,7 +122,7 @@ export default {
     },
     async fetchEvents() {
       try {
-        let response = await this.$axios.get("/api/events");
+        let response = await this.axios.get("/api/events");
         this.events = response.data;
       } catch (error) {
         console.error('Error:', error);
@@ -130,7 +130,7 @@ export default {
     },
     async deleteEvent(eventId) {
       try {
-        let response = await this.$axios.delete(`/schedule/${eventId}`);
+        let response = await this.axios.delete(`/schedule/${eventId}`);
         if (response.ok) {
           this.fetchEvents(); // Refresh events after deleting
           this.displayWeeklySchedule(); // Update weekly schedule display
@@ -150,12 +150,15 @@ export default {
             let eventDateTime = new Date(event.dateTime);
             return (
                 eventDateTime.getHours() === hour &&
-                eventDateTime.toLocaleString('en-US', { weekday: 'long' }) === day
+                eventDateTime.toLocaleString('en-US', {weekday: 'long'}) === day
             );
           })
           .map(event => {
             let eventDateTime = new Date(event.dateTime);
-            return `<div><strong>${event.name}</strong> at ${eventDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>`;
+            return `<div><strong>${event.name}</strong> at ${eventDateTime.toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit'
+            })}</div>`;
           })
           .join('');
     },
@@ -178,13 +181,14 @@ export default {
   margin-bottom: 5px;
   position: relative;
 }
+
 .event .delete-btn {
   position: absolute;
   top: 5px;
   right: 5px;
 }
+
 .schedule {
   margin-top: 20px;
 }
 </style>
-
