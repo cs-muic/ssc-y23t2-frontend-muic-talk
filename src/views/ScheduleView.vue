@@ -1,3 +1,10 @@
+<style scoped>
+@import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+@import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
+@import "../main/webapp/styles/styles.css";
+</style>
+
 <template>
   <div class="container mt-4">
     <nav class="navbar navbar-light bg-light">
@@ -73,9 +80,9 @@
             v-for="event in events"
             :key="event.id"
             class="event"
-            style="height: 45px"
+            style="height: 50px; border-radius: 5px"
           >
-            <p class="mt-1">
+            <p class="mt-2">
               <strong>{{ event.name.string }}</strong> -
               {{ new Date(event.date.string).toLocaleDateString() }}
               at
@@ -86,12 +93,13 @@
                 })
               }}
             </p>
-            <button
+            <v-btn
+              color="error"
               class="btn btn-danger btn-sm delete-btn"
-              @click="deleteEvent(event.id.string)"
+              @click="deleteEvent(event.id)"
             >
               <i class="fa fa-close"></i>
-            </button>
+            </v-btn>
           </div>
         </div>
       </div>
