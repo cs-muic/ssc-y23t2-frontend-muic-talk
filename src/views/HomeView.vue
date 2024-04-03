@@ -172,7 +172,7 @@
                     </v-card>
                   </v-dialog>
                 </template>
-                <v-btn color="primary">
+                <v-btn color="primary" @click="friends.edit = !friends.edit">
                   <i class="fa fa-pencil"></i>
                 </v-btn>
               </div>
@@ -189,9 +189,23 @@
                 <template v-slot:item="row">
                   <tr>
                     <td>{{ row.item.username.string }}</td>
-                    <td width="100">
-                      <v-btn dark small color="primary">
+                    <td width="200">
+                      <v-btn
+                        dark
+                        small
+                        color="primary"
+                        v-if="friends.edit === false"
+                      >
                         <i class="fa fa-comment"></i>
+                      </v-btn>
+                      <v-btn
+                        dark
+                        small
+                        color="primary"
+                        v-else
+                        @click="deleteFriend(row.item.username.string)"
+                      >
+                        <i class="fa fa-trash"></i>
                       </v-btn>
                     </td>
                   </tr>
@@ -235,6 +249,7 @@ export default {
         { text: "Username", value: "username" },
         { text: "Action", value: "" },
       ],
+      edit: false,
     },
     components: {},
   }),
@@ -253,7 +268,7 @@ export default {
       let formData = new FormData();
       formData.append("username", this.username);
       formData.append("userToAdd", this.addFriends.toAdd);
-      let response = await Vue.axios.post("/user/add", formData);
+      let response = await Vue.axios.post("/user/friends/add", formData);
       if (response.data.success) {
         this.addFriends.toAdd = "";
         this.addFriends.success = true;
@@ -268,7 +283,7 @@ export default {
     async getFriendReqs() {
       let formData = new FormData();
       formData.append("username", this.username);
-      let response = await Vue.axios.post("/user/requests", formData);
+      let response = await Vue.axios.post("/user/friends/requests", formData);
       if (response.data.success && response.data.request) {
         this.addFriends.requests = response.data.friends;
         this.addFriends.requests
@@ -282,7 +297,7 @@ export default {
       console.log(toAccept, this.username);
       formData.append("username", this.username);
       formData.append("userToAdd", toAccept);
-      await Vue.axios.post("/user/accept", formData);
+      await Vue.axios.post("/user/friends/accept", formData);
       await this.getFriendReqs();
       await this.getFriends();
     },
@@ -295,6 +310,15 @@ export default {
         this.friends.friends.map(({ username }) => username.string).join(", ");
         this.friends.showRequests = response.data.request;
       }
+    },
+    async deleteFriend(toDelete) {
+      let formData = new FormData();
+      console.log(toDelete, this.username);
+      formData.append("username", this.username);
+      formData.append("userToDelete", toDelete);
+      await Vue.axios.post("/user/friends/remove", formData);
+      await this.getFriendReqs();
+      await this.getFriends();
     },
   },
   async mounted() {

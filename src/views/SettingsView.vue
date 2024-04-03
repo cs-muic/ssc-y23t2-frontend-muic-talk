@@ -287,15 +287,9 @@ export default {
         formData
       );
       if (verifyResponse.data.success) {
-        let logoutResponse = await Vue.axios.get("/api/logout");
-        if (logoutResponse.data.success) {
-          let deleteResponse = await Vue.axios.post("/user/delete", formData);
-          if (deleteResponse.data.success) {
-            this.$router.push("/login");
-          } else {
-            this.deleteAccount.error = true;
-            this.deleteAccount.message = verifyResponse.data.message;
-          }
+        let deleteResponse = await Vue.axios.post("/user/delete", formData);
+        if (deleteResponse.data.success) {
+          this.$router.push("/login");
         } else {
           this.deleteAccount.error = true;
           this.deleteAccount.message = verifyResponse.data.message;
