@@ -1,3 +1,10 @@
+<style scoped>
+@import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+@import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
+@import "../main/webapp/styles/styles.css";
+</style>
+
 <template>
   <div class="container mt-4">
     <nav class="navbar navbar-light bg-light">
@@ -5,17 +12,25 @@
         <a class="navbar-brand"><strong>MUIC Talk</strong></a>
         <div>
           <router-link to="/">
-            <button class="btn btn-primary"><i class="fa fa-home"></i> &nbsp; Home</button>
+            <v-btn color="primary">
+              <i class="fa fa-home"></i> &nbsp; Home
+            </v-btn>
           </router-link>
           <router-link to="/schedule">
-            <button class="btn btn-primary"><i class="fa fa-calendar"></i> &nbsp; Schedule</button>
+            <v-btn color="primary">
+              <i class="fa fa-calendar"></i> &nbsp; Schedule
+            </v-btn>
           </router-link>
           <router-link to="/chat">
-            <button class="btn btn-primary"><i class="fa fa-comments"></i> &nbsp; Chats</button>
+            <v-btn color="primary">
+              <i class="fa fa-comments"></i> &nbsp; Chats
+            </v-btn>
           </router-link>
         </div>
         <div>
-          <button class="btn btn-primary" @click="logout"><i class="fa fa-sign-out"></i></button>
+          <v-btn color="primary" @click="logout">
+            <i class="fa fa-sign-out"></i>
+          </v-btn>
         </div>
       </div>
     </nav>
@@ -175,7 +190,7 @@ export default {
 
 <style scoped>
 .event {
-  background-color: #f0f0f0;
+  background-color: #c18fe5;
   border: 1px solid #ccc;
   padding: 5px;
   margin-bottom: 5px;
