@@ -1,7 +1,6 @@
 <style scoped>
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
-@import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
 @import "../main/webapp/styles/styles.css";
 </style>
 
@@ -487,12 +486,12 @@ export default {
     },
     async deleteFriend(toDelete) {
       let formData = new FormData();
-      console.log(toDelete, this.username);
       formData.append("username", this.username);
       formData.append("userToDelete", toDelete);
       await Vue.axios.post("/user/friends/remove", formData);
       await this.getFriendReqs();
       await this.getFriends();
+      alert("Successfully deleted friend " + toDelete);
     },
     async createGroup() {
       try {
@@ -501,7 +500,6 @@ export default {
         formData.append("name", this.newGroupName);
         // Assume you have a function to call your API to create the group
         await this.axios.post("/user/groups/create", formData);
-        alert("Group created successfully!");
         this.createGroupDialog = false; // Close the dialog
         this.newGroupName = ""; // Reset input
       } catch (error) {
@@ -511,7 +509,7 @@ export default {
     },
   },
   async mounted() {
-    // await this.getFriends();
+    await this.getFriends();
     await this.fetchGroups();
   },
 };
