@@ -65,18 +65,80 @@
           <tr style="vertical-align: middle">
             <td>
               <h3><strong>Groups</strong></h3>
+              <!-- Existing buttons for group management -->
+              <v-btn color="primary" class="btn-w40">
+                <i class="fa fa-plus"></i>
+              </v-btn>
+              <v-btn color="primary" class="btn-w40">
+                <i class="fa fa-pencil"></i>
+              </v-btn>
+
+              <!-- Button to open join group dialog -->
+              <v-btn color="primary" @click="joinGroupDialog = true">
+                Join Group
+              </v-btn>
+
+              <!-- Join Group Dialog -->
+              <v-dialog v-model="joinGroupDialog">
+                <v-card>
+                  <v-card-title>Join Group</v-card-title>
+                  <v-card-text>
+                    <v-text-field
+                      label="Enter Group ID"
+                      v-model="groupIdToJoin"
+                    ></v-text-field>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="primary" @click="joinGroup">Join</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <!-- Button to open create group dialog -->
+              <v-btn color="secondary" @click="createGroupDialog = true">
+                Create Group
+              </v-btn>
+
+              <!-- Create Group Dialog -->
+              <v-dialog v-model="createGroupDialog">
+                <v-card>
+                  <v-card-title>Create New Group</v-card-title>
+                  <v-card-text>
+                    <v-text-field
+                      label="Group Name"
+                      v-model="newGroupName"
+                    ></v-text-field>
+                    <!-- Include other fields as necessary -->
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn color="secondary" @click="createGroup">Create</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <div>
+                <h2>Groups</h2>
+                <ul>
+                  <li v-for="group in groups" :key="group.id">
+                    {{ group.name }}
+                  </li>
+                </ul>
+              </div>
             </td>
+
             <td style="padding-right: 12px">
               <div class="container-fliud pull-right">
                 <v-btn color="primary" class="btn-w40">
                   <i class="fa fa-plus"></i>
                 </v-btn>
+
                 <v-btn color="primary" class="btn-w40">
                   <i class="fa fa-pencil"></i>
                 </v-btn>
               </div>
             </td>
           </tr>
+
           <tr style="height: 100px"></tr>
           <tr style="vertical-align: middle">
             <td>
@@ -228,6 +290,10 @@ Vue.use(VueRouter);
 export default {
   data: () => ({
     name: "Home",
+    joinGroupDialog: false,
+    createGroupDialog: false,
+    newGroupName: "",
+    groupIdToJoin: "",
     username: store.state.username,
     displayName: store.state.name,
     addFriends: {
@@ -251,9 +317,36 @@ export default {
       ],
       edit: false,
     },
+    addGroup: {
+      dialog: false,
+      userId: "",
+      groupId: "",
+    },
+    groups: [],
     components: {},
   }),
   methods: {
+    async joinGroup() {
+      try {
+        await this.axios.post("/api/groups/join", {
+          groupId: this.groupIdToJoin,
+        });
+        alert("Group joined successfully!");
+        this.joinGroupDialog = false; // Close the dialog
+        this.groupIdToJoin = ""; // Reset input
+      } catch (error) {
+        console.error("Failed to join group:", error);
+        alert("Failed to join group.");
+      }
+    },
+    async fetchGroups() {
+      try {
+        const response = await Vue.axios.get("/api/groups");
+        this.groups = response.data;
+      } catch (error) {
+        console.error("There was an error fetching the groups:", error);
+      }
+    },
     async logout() {
       let response = await Vue.axios.get("/api/logout");
       if (response.data.success) {
@@ -323,6 +416,21 @@ export default {
   },
   async mounted() {
     await this.getFriends();
+    await this.fetchGroups();
+  },
+  async createGroup() {
+    try {
+      // Assume you have a function to call your API to create the group
+      await this.axios.post("/api/groups/create", {
+        name: this.newGroupName,
+      });
+      alert("Group created successfully!");
+      this.createGroupDialog = false; // Close the dialog
+      this.newGroupName = ""; // Reset input
+    } catch (error) {
+      console.error("Failed to create group:", error);
+      alert("Failed to create group.");
+    }
   },
 };
 </script>
