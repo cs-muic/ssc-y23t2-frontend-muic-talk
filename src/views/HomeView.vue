@@ -492,10 +492,11 @@ export default {
     },
     async createGroup() {
       try {
+        let formData = new FormData();
+        formData.append("username", this.username);
+        formData.append("name", this.newGroupName);
         // Assume you have a function to call your API to create the group
-        await this.axios.post("/api/groups/create", {
-          name: this.newGroupName,
-        });
+        await this.axios.post("/user/groups/create", formData);
         alert("Group created successfully!");
         this.createGroupDialog = false; // Close the dialog
         this.newGroupName = ""; // Reset input
