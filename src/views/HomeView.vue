@@ -405,7 +405,7 @@ export default {
   methods: {
     async joinGroup() {
       try {
-        await this.axios.post("/api/groups/join", {
+        await this.axios.post("/user/groups/join", {
           groupId: this.groupIdToJoin,
         });
         alert("Group joined successfully!");
@@ -418,10 +418,14 @@ export default {
     },
     async fetchGroups() {
       try {
-        const response = await Vue.axios.get("/api/groups");
-        this.groups = response.data;
+        let formData = new FormData();
+        formData.append("username", store.state.username);
+        const response = await Vue.axios.post("/user/groups", formData);
+        this.groups.groups = response.data.groups;
+        this.groups.groups.map(({ name }) => name.string).join(", ");
+        console.log(this.groups.groups);
       } catch (error) {
-        console.error("There was an error fetching the groups:", error);
+        console.log("There was an error fetching the groups:", error);
       }
     },
     async logout() {
@@ -507,7 +511,7 @@ export default {
     },
   },
   async mounted() {
-    await this.getFriends();
+    // await this.getFriends();
     await this.fetchGroups();
   },
 };
