@@ -96,7 +96,7 @@
             <v-btn
               color="error"
               class="btn btn-danger btn-sm delete-btn"
-              @click="deleteEvent(event.id)"
+              @click="deleteEvent(event.id.string)"
             >
               <i class="fa fa-close"></i>
             </v-btn>
@@ -210,12 +210,11 @@ export default {
         formData.append("username", this.username);
         formData.append("eventId", eventId);
         let response = await this.axios.post("/user/events/delete", formData);
-        if (response.data.success) {
-          this.fetchEvents(); // Refresh events after deleting
-          this.displayWeeklySchedule(); // Update weekly schedule display
-        } else {
+        if (response.data.success === false) {
           console.error("Failed to delete event");
         }
+        await this.fetchEvents(); // Refresh events after deleting
+        this.displayWeeklySchedule(); // Update weekly schedule display
       } catch (error) {
         console.error("Error:", error);
       }
