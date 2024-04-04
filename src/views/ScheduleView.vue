@@ -186,11 +186,14 @@ export default {
     },
     async addEvent() {
       try {
-        // Get the current date and time
+        // Get the current date
         const currentDate = new Date();
-        const currentDateString = currentDate.toISOString().split("T")[0];
+        const options = { timeZone: 'Asia/Bangkok' };
+        const currentDateString = currentDate.toLocaleString('en-US', options).split(',')[0];
+        console.log("Current Date:", currentDateString);
+        console.log("Selected Date:", this.newEvent.date);
         // Check if the selected date is in the past
-        if (this.newEvent.date < currentDateString) {
+        if (new Date(this.newEvent.date) < currentDate) {
           this.showPastDateAlert = true; // Show the alert
           return;
         }
