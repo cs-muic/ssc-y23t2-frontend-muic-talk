@@ -68,55 +68,6 @@
             <td style="padding-right: 12px">
               <div class="container-fliud pull-right">
                 <template>
-                  <v-dialog v-model="joinGroupDialog" max-width="500">
-                    <template v-slot:activator="{ props: activatorProps }">
-                      <!-- Button to open join group dialog -->
-                      <v-btn
-                        color="primary"
-                        v-bind="activatorProps"
-                        @click="joinGroupDialog = true"
-                      >
-                        Join
-                      </v-btn>
-                    </template>
-
-                    <!-- Join Group Dialog -->
-                    <v-card>
-                      <v-card-title
-                        class="d-flex justify-space-between align-center"
-                      >
-                        Join Group
-                        <v-btn color="primary" @click="joinGroupDialog = false">
-                          <i class="fa fa-close"></i>
-                        </v-btn>
-                      </v-card-title>
-                      <v-card-text>
-                        <v-row dense>
-                          <div class="row ml-2 px-2">
-                            <div class="col col-md-auto mt-6">
-                              <i class="fa fa-users"></i>
-                            </div>
-                            <div class="col">
-                              <v-text-field
-                                label="Enter Group ID"
-                                v-model="groupIdToJoin"
-                              ></v-text-field>
-                            </div>
-                            <div class="col col-md-auto">
-                              <v-btn
-                                class="mt-3"
-                                color="primary"
-                                @click="joinGroup"
-                                >Join</v-btn
-                              >
-                            </div>
-                          </div>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
-                  </v-dialog>
-                </template>
-                <template>
                   <v-dialog v-model="createGroupDialog" max-width="500">
                     <template v-slot:activator="{ props: activatorProps }">
                       <!-- Button to open create group dialog -->
@@ -187,7 +138,67 @@
               >
                 <template v-slot:item="row">
                   <tr>
-                    <td>{{ row.item.name.string }}</td>
+                    <td>
+                      {{ row.item.name.string }}
+                      <template>
+                        <v-dialog v-model="inviteGroupDialog" max-width="500">
+                          <template
+                            v-slot:activator="{ props: activatorProps }"
+                          >
+                            <!-- Button to open join group dialog -->
+                            <v-btn
+                              dark
+                              small
+                              color="primary"
+                              v-bind="activatorProps"
+                              @click="inviteGroupDialog = true"
+                            >
+                              <i class="fa fa-user-plus"></i>
+                            </v-btn>
+                          </template>
+
+                          <!-- Invite To Group Dialog -->
+                          <v-card>
+                            <v-card-title
+                              class="d-flex justify-space-between align-center"
+                            >
+                              Invite
+                              <v-btn
+                                color="primary"
+                                @click="inviteGroupDialog = false"
+                              >
+                                <i class="fa fa-close"></i>
+                              </v-btn>
+                            </v-card-title>
+                            <v-card-text>
+                              <v-row dense>
+                                <div class="row ml-2 px-2">
+                                  <div class="col col-md-auto mt-6">
+                                    <i class="fa fa-users"></i>
+                                  </div>
+                                  <div class="col">
+                                    <v-text-field
+                                      label="User to invite"
+                                      v-model="invite.user"
+                                    ></v-text-field>
+                                  </div>
+                                  <div class="col col-md-auto">
+                                    <v-btn
+                                      class="mt-3"
+                                      color="primary"
+                                      @click="
+                                        inviteToGroup(row.item.groupId.string)
+                                      "
+                                      >Invite</v-btn
+                                    >
+                                  </div>
+                                </div>
+                              </v-row>
+                            </v-card-text>
+                          </v-card>
+                        </v-dialog>
+                      </template>
+                    </td>
                     <td width="200">
                       <v-btn
                         dark
@@ -202,7 +213,7 @@
                         small
                         color="error"
                         v-else
-                        @click="deleteGroup(row.item.name.string)"
+                        @click="leaveGroup(row.item.groupId.string)"
                       >
                         <i class="fa fa-trash"></i>
                       </v-btn>
@@ -371,7 +382,7 @@ Vue.use(VueRouter);
 export default {
   data: () => ({
     name: "Home",
-    joinGroupDialog: false,
+    inviteGroupDialog: false,
     createGroupDialog: false,
     newGroupName: "",
     groupIdToJoin: "",
@@ -411,20 +422,23 @@ export default {
       ],
       edit: false,
     },
+    invite: {
+      user: "",
+    },
     components: {},
   }),
   methods: {
-    async joinGroup() {
+    async leaveGroup(groupId) {
       try {
-        await this.axios.post("/user/groups/join", {
-          groupId: this.groupIdToJoin,
-        });
-        alert("Group joined successfully!");
-        this.joinGroupDialog = false; // Close the dialog
-        this.groupIdToJoin = ""; // Reset input
+        console.log(groupId);
+        let formData = new FormData();
+        formData.append("username", this.username);
+        formData.append("groupId", groupId);
+        await this.axios.post("/user/groups/leave", formData);
+        await this.fetchGroups();
       } catch (error) {
-        console.error("Failed to join group:", error);
-        alert("Failed to join group.");
+        console.error("Failed to leave group:", error);
+        alert("Failed to leave group.");
       }
     },
     async fetchGroups() {
@@ -433,6 +447,7 @@ export default {
         formData.append("username", store.state.username);
         const response = await Vue.axios.post("/user/groups", formData);
         this.groups.groups = response.data.groups;
+        this.groups.groups.map(({ groupId }) => groupId.string).join(", ");
         this.groups.groups.map(({ name }) => name.string).join(", ");
         console.log(this.groups.groups);
       } catch (error) {
@@ -514,9 +529,22 @@ export default {
         await this.axios.post("/user/groups/create", formData);
         this.createGroupDialog = false; // Close the dialog
         this.newGroupName = ""; // Reset input
+        await this.fetchGroups();
       } catch (error) {
         console.error("Failed to create group:", error);
         alert("Failed to create group.");
+      }
+    },
+    async inviteToGroup(group) {
+      try {
+        let formData = new FormData();
+        formData.append("toInvite", this.invite.user);
+        formData.append("groupId", group);
+        await this.axios.post("/user/groups/invite", formData);
+        this.invite.user = "";
+      } catch (error) {
+        console.error("Failed to invite ", this.invite.user, " to group");
+        alert("Failed to invite ", this.invite.user, " to group");
       }
     },
   },
