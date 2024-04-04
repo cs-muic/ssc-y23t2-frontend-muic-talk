@@ -275,6 +275,24 @@ export default {
 .schedule {
   margin-top: 20px;
 }
+
+.schedule table {
+  width: 100%;
+  border-collapse: collapse; /* Collapse borders for a cleaner look */
+}
+
+.schedule th,
+.schedule td {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd; /* Add borders to table cells */
+}
+
+.schedule th {
+  background-color: rgba(235, 216, 255, 0.7);
+}
+
+.schedule td {
+  vertical-align: middle;
+}
 </style>
-<script setup>
-</script>
