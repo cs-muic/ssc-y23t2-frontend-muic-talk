@@ -27,11 +27,15 @@
               required
             ></v-text-field>
             <v-text-field
-              type="password"
-              v-model="password.password"
-              :rules="passwordRules"
-              label="Password"
-              required
+                type="password"
+                v-model="password.password"
+                :rules="passwordRules"
+                label="Password"
+                required
+                :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append="togglePasswordVisibility"
+                :append-icon-aria-label="showPassword ? 'Hide password' : 'Show password'"
+                :type="showPassword ? 'text' : 'password'"
             ></v-text-field>
             <v-btn
               :disabled="!valid"
@@ -83,11 +87,15 @@
               required
             ></v-text-field>
             <v-text-field
-              type="password"
-              v-model="password.password"
-              :rules="passwordRules"
-              label="Password"
-              required
+                type="password"
+                v-model="password.password"
+                :rules="passwordRules"
+                label="Password"
+                required
+                :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append="togglePasswordVisibility"
+                :append-icon-aria-label="showPassword ? 'Hide password' : 'Show password'"
+                :type="showPassword ? 'text' : 'password'"
             ></v-text-field>
             <v-btn
               :disabled="!valid"
@@ -132,8 +140,12 @@ export default {
     usernameRules: [(v) => !!v || "Username is required"],
     displayNameRules: [(v) => !!v || "Display Name is required"],
     passwordRules: [(v) => !!v || "Password is required"],
+    showPassword: false
   }),
   methods: {
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
     async submit_login() {
       if (this.$refs.form.validate()) {
         //submit to backend to authenticate

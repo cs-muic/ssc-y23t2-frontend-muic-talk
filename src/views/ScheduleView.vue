@@ -35,6 +35,11 @@
       </div>
     </nav>
 
+    <div v-if="showPastDateAlert" class="alert alert-danger mt-3" role="alert">
+      <i class="fa fa-exclamation-circle mr-2"></i>
+      Please select a future date for the event.
+    </div>
+
     <div class="row mt-4">
       <div class="col-md-6">
         <h3>Add Event</h3>
@@ -160,6 +165,7 @@ export default {
         "Friday",
         "Saturday",
       ],
+      showPastDateAlert: false,
     };
   },
   methods: {
@@ -180,6 +186,15 @@ export default {
     },
     async addEvent() {
       try {
+        // Get the current date and time
+        const currentDate = new Date();
+        const currentDateString = currentDate.toISOString().split("T")[0];
+        // Check if the selected date is in the past
+        if (this.newEvent.date < currentDateString) {
+          this.showPastDateAlert = true; // Show the alert
+          return;
+        }
+
         let formData = new FormData();
         formData.append("username", this.username);
         formData.append("eventName", this.newEvent.name);
