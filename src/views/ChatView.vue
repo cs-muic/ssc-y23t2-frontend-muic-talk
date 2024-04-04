@@ -53,7 +53,7 @@ export default {
     async logout() {
       let response = await Vue.axios.get("/api/logout");
       if (response.data.success) {
-        this.$router.push("/login");
+        await this.$router.push("/login");
       }
     },
   },

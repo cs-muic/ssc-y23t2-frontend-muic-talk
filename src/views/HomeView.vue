@@ -381,6 +381,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store/index";
+
 Vue.use(VueRouter);
 
 export default {
@@ -555,34 +556,10 @@ export default {
         alert("Failed to invite ", this.invite.user, " to group");
       }
     },
-    connectToWebSocket(groupId) {
-      const socket = new SockJS("/your-endpoint"); // Your WebSocket endpoint
-      const stompClient = Stomp.over(socket);
-      stompClient.connect({}, (frame) => {
-        stompClient.subscribe(`/topic/messages/${groupId}`, (message) => {
-          const receivedMessage = JSON.parse(message.body);
-          this.messages.push(receivedMessage); // Add received message to messages array
-        });
-      });
-      this.stompClient = stompClient;
-    },
-    sendMessage(text) {
-      const message = {
-        body: text,
-        groupId: this.groupId /* Other necessary fields */,
-      };
-      this.stompClient.send(
-        `/app/chat/${this.groupId}`,
-        {},
-        JSON.stringify(message)
-      );
-    },
   },
   async mounted() {
     await this.getFriends();
     await this.fetchGroups();
-    const groupId = this.$route.params.groupId; // Get groupId from URL
-    this.connectToWebSocket(groupId);
   },
 };
 </script>

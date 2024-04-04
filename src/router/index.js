@@ -2,8 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import store from "@/store";
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
 
 Vue.use(VueRouter);
 
@@ -12,6 +10,14 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView,
+  },
+  {
+    path: "/:groupid",
+    name: "ChatRoom",
+    component: () => {
+      return import("@/views/ChatRoom.vue");
+    }, // Assuming lazy-loading here for consistency
+    props: true, // This passes route.params to the component as props
   },
   {
     path: "/about",
