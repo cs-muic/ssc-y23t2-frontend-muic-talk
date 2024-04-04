@@ -9,10 +9,7 @@
         <div class="col-sm-12 col-md-4 my-auto">
           <div class="form-title">
             <div class="webapp-logo">
-              <img
-                src="../assets/images/MuicTALK_Logo.png"
-                alt="Webapp Logo"
-              />
+              <img src="../assets/images/MuicTALK_Logo.png" alt="Webapp Logo" />
             </div>
             <h2>Login</h2>
           </div>
@@ -27,15 +24,16 @@
               required
             ></v-text-field>
             <v-text-field
-                type="password"
-                v-model="password.password"
-                :rules="passwordRules"
-                label="Password"
-                required
-                :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
-                @click:append="togglePasswordVisibility"
-                :append-icon-aria-label="showPassword ? 'Hide password' : 'Show password'"
-                :type="showPassword ? 'text' : 'password'"
+              v-model="password.password"
+              :rules="passwordRules"
+              label="Password"
+              required
+              :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+              @click:append="togglePasswordVisibility"
+              :append-icon-aria-label="
+                showPassword ? 'Hide password' : 'Show password'
+              "
+              :type="showPassword ? 'text' : 'password'"
             ></v-text-field>
             <v-btn
               :disabled="!valid"
@@ -59,10 +57,7 @@
         <div class="col-sm-12 col-md-4 my-auto">
           <div class="form-title">
             <div class="webapp-logo">
-              <img
-                src="../assets/images/MuicTALK_Logo.png"
-                alt="Webapp Logo"
-              />
+              <img src="../assets/images/MuicTALK_Logo.png" alt="Webapp Logo" />
             </div>
             <h2>Sign Up</h2>
           </div>
@@ -87,15 +82,16 @@
               required
             ></v-text-field>
             <v-text-field
-                type="password"
-                v-model="password.password"
-                :rules="passwordRules"
-                label="Password"
-                required
-                :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
-                @click:append="togglePasswordVisibility"
-                :append-icon-aria-label="showPassword ? 'Hide password' : 'Show password'"
-                :type="showPassword ? 'text' : 'password'"
+              v-model="password.password"
+              :rules="passwordRules"
+              label="Password"
+              required
+              :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+              @click:append="togglePasswordVisibility"
+              :append-icon-aria-label="
+                showPassword ? 'Hide password' : 'Show password'
+              "
+              :type="showPassword ? 'text' : 'password'"
             ></v-text-field>
             <v-btn
               :disabled="!valid"
@@ -140,7 +136,7 @@ export default {
     usernameRules: [(v) => !!v || "Username is required"],
     displayNameRules: [(v) => !!v || "Display Name is required"],
     passwordRules: [(v) => !!v || "Password is required"],
-    showPassword: false
+    showPassword: false,
   }),
   methods: {
     togglePasswordVisibility() {

@@ -169,9 +169,10 @@
               <h4>Delete Account</h4>
               <strong>This action cannot be undone!</strong>
               <v-text-field
+                type="password"
                 v-model="deleteAccount.password"
                 :rules="deleteAccount.passwordRules"
-                label="Password Type"
+                label="Confirm Password"
                 required
               ></v-text-field>
               <v-btn
