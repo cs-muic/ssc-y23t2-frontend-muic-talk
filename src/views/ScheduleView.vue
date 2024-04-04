@@ -119,7 +119,7 @@
             <!-- Weekly schedule will be displayed here -->
             <tr v-for="hour in 24" :key="hour">
               <td>{{ formatHour(hour) }}</td>
-              <td v-for="day in daysOfWeek" :key="day">
+              <td v-for="(day, index) in daysOfWeek" :key="index" :class="{ 'current-day': isCurrentDay(index) }">
                 <div v-html="getEventsForDay(hour, day)"></div>
               </td>
             </tr>
@@ -159,6 +159,11 @@ export default {
     };
   },
   methods: {
+    isCurrentDay(index) {
+      const currentDate = new Date();
+      const currentDayIndex = currentDate.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+      return index === currentDayIndex;
+    },
     async logout() {
       try {
         let response = await this.axios.get("/api/logout");
@@ -294,5 +299,9 @@ export default {
 
 .schedule td {
   vertical-align: middle;
+}
+
+.schedule td.current-day {
+  background-color: #f9f5ff; /* Change the background color for the current day */
 }
 </style>
