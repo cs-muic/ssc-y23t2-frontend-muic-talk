@@ -34,7 +34,38 @@
         </div>
       </div>
     </nav>
-    <!--Put your code here !-->
+    <div v-if="showAll">
+      <!--Put your code here !-->
+      <v-virtual-scroll
+        :items="groups.groups"
+        :item-height="75"
+        max-height="80vh"
+      >
+        <template v-slot:default="{ item }">
+          <v-list-item>
+            <v-list-item-content>
+              <v-btn depressed height="75" class="mr-4" @click="goToChat(item)">
+                {{ item.name.string }}
+              </v-btn>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+      </v-virtual-scroll>
+    </div>
+    <div class="mt-5" v-else>
+      <nav class="navbar navbar-light bg-light" style="border-radius: 10px">
+        <div class="container-fluid pull-left">
+          <v-btn color="primary" @click="goBack">
+            <i class="fa fa-arrow-left"></i>
+          </v-btn>
+          <div style="width: 100%">
+            <p style="text-align: left">
+              {{ this.currentGroup }}
+            </p>
+          </div>
+        </div>
+      </nav>
+    </div>
   </div>
 </template>
 
@@ -45,9 +76,18 @@ import store from "../store/index";
 Vue.use(VueRouter);
 export default {
   data: () => ({
-    name: "Schedule",
+    name: "Chat",
     username: store.state.username,
     displayName: store.state.name,
+    groups: {
+      groups: [],
+      headers: [
+        { text: "", value: "name" },
+        { text: "", value: "" },
+      ],
+    },
+    showAll: true,
+    currentGroup: "",
   }),
   methods: {
     async logout() {
@@ -56,6 +96,43 @@ export default {
         this.$router.push("/login");
       }
     },
+    async fetchGroups() {
+      try {
+        let formData = new FormData();
+        formData.append("username", store.state.username);
+        const response = await Vue.axios.post("/user/groups", formData);
+        this.groups.groups = response.data.groups;
+        this.groups.groups.map(({ groupId }) => groupId.string).join(", ");
+        this.groups.groups.map(({ name }) => name.string).join(", ");
+        console.log(this.groups.groups);
+      } catch (error) {
+        console.log("There was an error fetching the groups:", error);
+      }
+    },
+    async goToChat(chatId) {
+      try {
+        console.log(chatId.groupId.string);
+        console.log(chatId.name.string);
+        let formData = new FormData();
+        formData.append("username", store.state.username);
+        let url = "/user/chat/" + chatId.groupId.string;
+        const response = await Vue.axios.post(url, formData);
+        console.log(response.data.success);
+        console.log(this.groups.groups);
+        this.showAll = false;
+        this.currentGroup = chatId.name.string;
+        console.log(this.showAll);
+      } catch (error) {
+        console.log("There was an error fetching the groups:", error);
+      }
+    },
+    async goBack() {
+      this.showAll = true;
+      //await this.fetchGroups();
+    },
+  },
+  async mounted() {
+    await this.fetchGroups();
   },
 };
 </script>
