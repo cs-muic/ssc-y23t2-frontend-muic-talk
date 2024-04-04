@@ -2,6 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import store from "@/store";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 Vue.use(VueRouter);
 

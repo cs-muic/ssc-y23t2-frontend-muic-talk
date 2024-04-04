@@ -200,20 +200,24 @@
                       </template>
                     </td>
                     <td width="200">
+                      <!-- Chat/Enter Group Button -->
                       <v-btn
                         dark
                         small
                         color="primary"
                         v-if="groups.edit === false"
+                        @click="goToGroup(row.item.groupId.string)"
                       >
                         <i class="fa fa-comment"></i>
                       </v-btn>
+
+                      <!-- Leave Group Button -->
                       <v-btn
                         dark
                         small
                         color="error"
                         v-else
-                        @click="leaveGroup(row.item.groupId.string)"
+                        @click="leaveGroup(row.item.groupId)"
                       >
                         <i class="fa fa-trash"></i>
                       </v-btn>
@@ -428,6 +432,10 @@ export default {
     components: {},
   }),
   methods: {
+    goToGroup(groupId) {
+      console.log(groupId);
+      this.$router.push({ path: `/${groupId}` });
+    },
     async leaveGroup(groupId) {
       try {
         console.log(groupId);
@@ -547,10 +555,34 @@ export default {
         alert("Failed to invite ", this.invite.user, " to group");
       }
     },
+    connectToWebSocket(groupId) {
+      const socket = new SockJS("/your-endpoint"); // Your WebSocket endpoint
+      const stompClient = Stomp.over(socket);
+      stompClient.connect({}, (frame) => {
+        stompClient.subscribe(`/topic/messages/${groupId}`, (message) => {
+          const receivedMessage = JSON.parse(message.body);
+          this.messages.push(receivedMessage); // Add received message to messages array
+        });
+      });
+      this.stompClient = stompClient;
+    },
+    sendMessage(text) {
+      const message = {
+        body: text,
+        groupId: this.groupId /* Other necessary fields */,
+      };
+      this.stompClient.send(
+        `/app/chat/${this.groupId}`,
+        {},
+        JSON.stringify(message)
+      );
+    },
   },
   async mounted() {
     await this.getFriends();
     await this.fetchGroups();
+    const groupId = this.$route.params.groupId; // Get groupId from URL
+    this.connectToWebSocket(groupId);
   },
 };
 </script>
