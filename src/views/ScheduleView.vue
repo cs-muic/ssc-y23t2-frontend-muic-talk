@@ -11,17 +11,17 @@
       <div class="container-fluid">
         <a class="navbar-brand"><strong>MUIC Talk</strong></a>
         <div>
-          <router-link to="/">
+          <router-link to="/" class="mr-2">
             <v-btn color="primary">
               <i class="fa fa-home"></i> &nbsp; Home
             </v-btn>
           </router-link>
-          <router-link to="/schedule">
+          <router-link to="/schedule" class="mr-2">
             <v-btn color="primary">
               <i class="fa fa-calendar"></i> &nbsp; Schedule
             </v-btn>
           </router-link>
-          <router-link to="/chat">
+          <router-link to="/chat" class="mr-2">
             <v-btn color="primary">
               <i class="fa fa-comments"></i> &nbsp; Chats
             </v-btn>
@@ -119,7 +119,11 @@
             <!-- Weekly schedule will be displayed here -->
             <tr v-for="hour in 24" :key="hour">
               <td>{{ formatHour(hour) }}</td>
-              <td v-for="day in daysOfWeek" :key="day">
+              <td
+                v-for="(day, index) in daysOfWeek"
+                :key="index"
+                :class="{ 'current-day': isCurrentDay(index) }"
+              >
                 <div v-html="getEventsForDay(hour, day)"></div>
               </td>
             </tr>
@@ -159,6 +163,11 @@ export default {
     };
   },
   methods: {
+    isCurrentDay(index) {
+      const currentDate = new Date();
+      const currentDayIndex = currentDate.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+      return index === currentDayIndex;
+    },
     async logout() {
       try {
         let response = await this.axios.get("/api/logout");
@@ -274,5 +283,29 @@ export default {
 
 .schedule {
   margin-top: 20px;
+}
+
+.schedule table {
+  width: 100%;
+  border-collapse: collapse; /* Collapse borders for a cleaner look */
+}
+
+.schedule th,
+.schedule td {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd; /* Add borders to table cells */
+}
+
+.schedule th {
+  background-color: rgba(235, 216, 255, 0.7);
+}
+
+.schedule td {
+  vertical-align: middle;
+}
+
+.schedule td.current-day {
+  background-color: #f9f5ff; /* Change the background color for the current day */
 }
 </style>

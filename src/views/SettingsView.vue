@@ -10,17 +10,17 @@
       <div class="container-fluid">
         <a class="navbar-brand"><strong>MUIC Talk</strong></a>
         <div>
-          <router-link to="/">
+          <router-link to="/" class="mr-2">
             <v-btn color="primary">
               <i class="fa fa-home"></i> &nbsp; Home
             </v-btn>
           </router-link>
-          <router-link to="/schedule">
+          <router-link to="/schedule" class="mr-2">
             <v-btn color="primary">
               <i class="fa fa-calendar"></i> &nbsp; Schedule
             </v-btn>
           </router-link>
-          <router-link to="/chat">
+          <router-link to="/chat" class="mr-2">
             <v-btn color="primary">
               <i class="fa fa-comments"></i> &nbsp; Chats
             </v-btn>
@@ -171,7 +171,7 @@
               <v-text-field
                 v-model="deleteAccount.password"
                 :rules="deleteAccount.passwordRules"
-                label="Confirm Password"
+                label="Password Type"
                 required
               ></v-text-field>
               <v-btn
@@ -192,6 +192,16 @@
           </v-main>
         </v-layout>
       </v-card>
+    </div>
+    <div>
+      <!-- Bye Bye message -->
+      <transition name="fade">
+        <div v-if="showByeBye" class="bye-bye-message-overlay">
+          <div class="bye-bye-message">
+            <h4>BYE BYE</h4>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -230,6 +240,7 @@ export default {
       error: false,
       message: false,
     },
+    showByeBye: false,
   }),
   methods: {
     async logout() {
@@ -288,7 +299,10 @@ export default {
       if (verifyResponse.data.success) {
         let deleteResponse = await Vue.axios.post("/user/delete", formData);
         if (deleteResponse.data.success) {
-          this.$router.push("/login");
+          this.showByeBye = true; // Show "BYE BYE" message
+          setTimeout(() => {
+            this.$router.push("/login");
+          }, 2000); // Redirect to login page after 2 seconds
         } else {
           this.deleteAccount.error = true;
           this.deleteAccount.message = verifyResponse.data.message;
@@ -301,3 +315,41 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* Add new styles for smooth transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
+
+.bye-bye-message-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* White background with opacity */
+  z-index: 9999; /* Ensure it's above other content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bye-bye-message h4 {
+  font-size: 4rem;
+  color: #550a8a;
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+</style>

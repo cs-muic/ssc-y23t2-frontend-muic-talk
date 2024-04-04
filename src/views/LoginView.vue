@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background">
     <!-- MUIC Logo -->
     <div class="logo-container">
       <img src="../main/webapp/Images/MUIC_Logo.png" alt="MUIC Logo" />
@@ -9,16 +9,12 @@
         <div class="col-sm-12 col-md-4 my-auto">
           <div class="form-title">
             <div class="webapp-logo">
-              <div>
-                <img
-                  src="../main/webapp/Images/MuicTALK_Logo.png"
-                  alt="Webapp Logo"
-                />
-              </div>
-              <div>
-                <h2>Login</h2>
-              </div>
+              <img
+                src="../main/webapp/Images/MuicTALK_Logo.png"
+                alt="Webapp Logo"
+              />
             </div>
+            <h2>Login</h2>
           </div>
           <div class="alert alert-danger" role="alert" v-show="logInError.show">
             Failed to Log In: {{ logInError.message }}
@@ -37,39 +33,34 @@
               label="Password"
               required
             ></v-text-field>
-
             <v-btn
               :disabled="!valid"
               color="primary"
               class="btn btn-primary"
               @click="submit_login"
+              >Login</v-btn
             >
-              Login
-            </v-btn>
           </v-form>
           <!-- Link to Sign Up -->
           <div class="mt-3">
-            Don't have an account? <a @click="show = !show">Sign Up</a>
+            Don't have an account?
+            <span class="link" @click="show = !show">Sign Up</span>
           </div>
         </div>
       </div>
     </div>
-    <!--    Sign Up form!-->
+    <!-- Sign Up form -->
     <div class="container login-container" v-else>
       <div class="row justify-content-md-center h-100">
         <div class="col-sm-12 col-md-4 my-auto">
           <div class="form-title">
             <div class="webapp-logo">
-              <div>
-                <img
-                  src="../main/webapp/Images/MuicTALK_Logo.png"
-                  alt="Webapp Logo"
-                />
-              </div>
-              <div>
-                <h2>Sign Up</h2>
-              </div>
+              <img
+                src="../main/webapp/Images/MuicTALK_Logo.png"
+                alt="Webapp Logo"
+              />
             </div>
+            <h2>Sign Up</h2>
           </div>
           <div
             class="alert alert-danger"
@@ -109,7 +100,8 @@
           </v-form>
           <!-- Link to Login -->
           <div class="mt-3">
-            Already have an account? <a @click="show = !show">Login</a>
+            Already have an account?
+            <span class="link" @click="show = !show">Login</span>
           </div>
         </div>
       </div>
@@ -193,4 +185,49 @@ export default {
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
 @import "../main/webapp/styles/login-styles.css";
 @import "../main/webapp/styles/styles.css";
+
+.background {
+  background-image: url("../main/webapp/Images/41_MUIC_campus.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 100vh; /* Adjust the height as needed */
+}
+
+.logo-container {
+  margin-bottom: 20px;
+}
+
+.webapp-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-title {
+  text-align: center;
+}
+
+.alert {
+  margin-bottom: 20px;
+}
+
+.link {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link:hover {
+  text-decoration: none;
+}
+
+.login-container {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.7
+  ); /* Adjust the opacity value as needed */
+  padding: 20px;
+  border-radius: 10px;
+}
 </style>
