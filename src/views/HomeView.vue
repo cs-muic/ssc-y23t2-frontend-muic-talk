@@ -76,7 +76,8 @@
                         v-bind="activatorProps"
                         @click="createGroupDialog = true"
                       >
-                        Create
+                        <i class="fa fa-plus"></i>
+                        &nbsp; Create
                       </v-btn>
                     </template>
 
@@ -118,8 +119,82 @@
                     </v-card>
                   </v-dialog>
                 </template>
+                <template>
+                  <v-dialog v-model="inviteGroupDialog" max-width="500">
+                    <template v-slot:activator="{ props: activatorProps }">
+                      <!-- Button to open join group dialog -->
+                      <v-btn
+                        color="primary"
+                        v-bind="activatorProps"
+                        @click="inviteGroupDialog = true"
+                      >
+                        <i class="fa fa-user-plus"></i>
+                        &nbsp; Invite
+                      </v-btn>
+                    </template>
+
+                    <!-- Invite To Group Dialog -->
+                    <v-card>
+                      <v-card-title
+                        class="d-flex justify-space-between align-center"
+                      >
+                        Invite a user to a group!
+                        <v-btn
+                          color="primary"
+                          @click="inviteGroupDialog = false"
+                        >
+                          <i class="fa fa-close"></i>
+                        </v-btn>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-row dense>
+                          <div class="row ml-2 px-2">
+                            <div class="col col-md-auto mt-6">
+                              <i class="fa fa-user-plus"></i>
+                            </div>
+                            <div class="col">
+                              <v-text-field
+                                label="User to invite"
+                                v-model="invite.user"
+                                required
+                              ></v-text-field>
+                            </div>
+                          </div>
+                          <div class="row ml-2 px-2">
+                            <div class="col col-md-auto mt-6">
+                              <i class="fa fa-user-plus"></i>
+                            </div>
+                            <div class="col">
+                              <v-autocomplete
+                                v-model="invite.group"
+                                :items="groups.groups"
+                                item-text="name.string"
+                                item-value="groupId.string"
+                                dense
+                                filled
+                                label="Group"
+                              >
+                              </v-autocomplete>
+                            </div>
+                          </div>
+                          <div class="row ml-2 px-2">
+                            <div class="col col-md-auto">
+                              <v-btn
+                                class="mt-3"
+                                color="primary"
+                                @click="inviteToGroup()"
+                                >Invite</v-btn
+                              >
+                            </div>
+                          </div>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-dialog>
+                </template>
                 <v-btn color="primary" @click="groups.edit = !groups.edit">
                   <i class="fa fa-pencil"></i>
+                  &nbsp; Edit
                 </v-btn>
               </div>
             </td>
@@ -130,92 +205,28 @@
                 style="width: 100%"
                 fill-width
                 :footer-props="{
-                  'items-per-page-options': [10],
+                  'items-per-page-options': [5],
                 }"
-                :items-per-page="10"
+                :items-per-page="5"
                 :headers="groups.headers"
                 :items="groups.groups"
+                :sort-by="groups.sortBy"
               >
                 <template v-slot:item="row">
                   <tr>
                     <td>
                       {{ row.item.name.string }}
-                      <template>
-                        <v-dialog v-model="inviteGroupDialog" max-width="500">
-                          <template
-                            v-slot:activator="{ props: activatorProps }"
-                          >
-                            <!-- Button to open join group dialog -->
-                            <v-btn
-                              dark
-                              small
-                              color="primary"
-                              v-bind="activatorProps"
-                              @click="inviteGroupDialog = true"
-                            >
-                              <i class="fa fa-user-plus"></i>
-                            </v-btn>
-                          </template>
-
-                          <!-- Invite To Group Dialog -->
-                          <v-card>
-                            <v-card-title
-                              class="d-flex justify-space-between align-center"
-                            >
-                              Invite
-                              <v-btn
-                                color="primary"
-                                @click="inviteGroupDialog = false"
-                              >
-                                <i class="fa fa-close"></i>
-                              </v-btn>
-                            </v-card-title>
-                            <v-card-text>
-                              <v-row dense>
-                                <div class="row ml-2 px-2">
-                                  <div class="col col-md-auto mt-6">
-                                    <i class="fa fa-users"></i>
-                                  </div>
-                                  <div class="col">
-                                    <v-text-field
-                                      label="User to invite"
-                                      v-model="invite.user"
-                                    ></v-text-field>
-                                  </div>
-                                  <div class="col col-md-auto">
-                                    <v-btn
-                                      class="mt-3"
-                                      color="primary"
-                                      @click="
-                                        inviteToGroup(row.item.groupId.string)
-                                      "
-                                      >Invite</v-btn
-                                    >
-                                  </div>
-                                </div>
-                              </v-row>
-                            </v-card-text>
-                          </v-card>
-                        </v-dialog>
-                      </template>
                     </td>
-                    <td width="200">
-                      <v-btn
-                        dark
-                        small
-                        color="primary"
-                        v-if="groups.edit === false"
-                      >
-                        <i class="fa fa-comment"></i>
-                      </v-btn>
+                    <td width="100">
                       <v-btn
                         dark
                         small
                         color="error"
-                        v-else
+                        v-if="groups.edit"
                         @click="leaveGroup(row.item.groupId.string)"
                       >
-                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-user-times"></i>
+                        &nbsp; Leave
                       </v-btn>
                     </td>
                   </tr>
@@ -237,8 +248,10 @@
                         color="primary"
                         v-bind="activatorProps"
                         @click="friendsModal"
-                        ><i class="fa fa-plus"></i
-                      ></v-btn>
+                      >
+                        <i class="fa fa-plus"></i>
+                        &nbsp; Add
+                      </v-btn>
                     </template>
 
                     <v-card>
@@ -324,6 +337,7 @@
                 </template>
                 <v-btn color="primary" @click="friends.edit = !friends.edit">
                   <i class="fa fa-pencil"></i>
+                  &nbsp; Edit
                 </v-btn>
               </div>
             </td>
@@ -343,23 +357,16 @@
                 <template v-slot:item="row">
                   <tr>
                     <td>{{ row.item.username.string }}</td>
-                    <td width="200">
-                      <v-btn
-                        dark
-                        small
-                        color="primary"
-                        v-if="friends.edit === false"
-                      >
-                        <i class="fa fa-comment"></i>
-                      </v-btn>
+                    <td width="100">
                       <v-btn
                         dark
                         small
                         color="error"
-                        v-else
+                        v-if="friends.edit"
                         @click="deleteFriend(row.item.username.string)"
                       >
-                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-user-times"></i>
+                        &nbsp; Remove
                       </v-btn>
                     </td>
                   </tr>
@@ -417,13 +424,15 @@ export default {
     groups: {
       groups: [],
       headers: [
-        { text: "Group Name", value: "name" },
-        { text: "", value: "" },
+        { title: "Group Name", key: "Group Name", value: "name" },
+        { key: "", value: "" },
       ],
       edit: false,
+      sortBy: [{ key: "Group Name", order: "asc" }],
     },
     invite: {
       user: "",
+      group: "",
     },
     components: {},
   }),
@@ -535,17 +544,17 @@ export default {
         alert("Failed to create group.");
       }
     },
-    async inviteToGroup(group) {
-      try {
-        let formData = new FormData();
-        formData.append("toInvite", this.invite.user);
-        formData.append("groupId", group);
-        await this.axios.post("/user/groups/invite", formData);
-        this.invite.user = "";
-      } catch (error) {
+    async inviteToGroup() {
+      let formData = new FormData();
+      console.log(this.invite.group);
+      formData.append("toInvite", this.invite.user);
+      formData.append("groupId", this.invite.group);
+      let response = await this.axios.post("/user/groups/invite", formData);
+      if (!response.data.success) {
         console.error("Failed to invite ", this.invite.user, " to group");
         alert("Failed to invite ", this.invite.user, " to group");
       }
+      this.invite.user = "";
     },
   },
   async mounted() {
