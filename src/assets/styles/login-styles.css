@@ -4,7 +4,7 @@ body {
 }
 body::before {
   content: "";
-  background-image: url("../Images/41_MUIC_campus.jpg");
+  background-image: url("../images/41_MUIC_campus.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   position: absolute;

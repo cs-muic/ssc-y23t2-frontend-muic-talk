@@ -2,7 +2,7 @@
   <div class="background">
     <!-- MUIC Logo -->
     <div class="logo-container">
-      <img src="../main/webapp/Images/MUIC_Logo.png" alt="MUIC Logo" />
+      <img src="../assets/images/MUIC_Logo.png" alt="MUIC Logo" />
     </div>
     <div class="container login-container" v-if="show">
       <div class="row justify-content-md-center h-100">
@@ -10,7 +10,7 @@
           <div class="form-title">
             <div class="webapp-logo">
               <img
-                src="../main/webapp/Images/MuicTALK_Logo.png"
+                src="../assets/images/MuicTALK_Logo.png"
                 alt="Webapp Logo"
               />
             </div>
@@ -56,7 +56,7 @@
           <div class="form-title">
             <div class="webapp-logo">
               <img
-                src="../main/webapp/Images/MuicTALK_Logo.png"
+                src="../assets/images/MuicTALK_Logo.png"
                 alt="Webapp Logo"
               />
             </div>
@@ -183,11 +183,11 @@ export default {
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
-@import "../main/webapp/styles/login-styles.css";
-@import "../main/webapp/styles/styles.css";
+@import "../assets/styles/login-styles.css";
+@import "../assets/styles/styles.css";
 
 .background {
-  background-image: url("../main/webapp/Images/41_MUIC_campus.jpg");
+  background-image: url("../assets/images/41_MUIC_campus.jpg");
   background-size: cover;
   background-position: center;
   height: 100vh; /* Adjust the height as needed */

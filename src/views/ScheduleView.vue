@@ -2,7 +2,7 @@
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js";
-@import "../main/webapp/styles/styles.css";
+@import "../assets/styles/styles.css";
 </style>
 
 <template>
@@ -266,7 +266,7 @@ export default {
 <style scoped>
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
-@import "../main/webapp/styles/styles.css";
+@import "../assets/styles/styles.css";
 .event {
   background-color: #f0f0f0;
   border: 1px solid #ccc;

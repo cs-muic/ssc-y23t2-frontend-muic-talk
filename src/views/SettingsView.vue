@@ -1,7 +1,7 @@
 <style scoped>
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
-@import "../main/webapp/styles/styles.css";
+@import "../assets/styles/styles.css";
 </style>
 
 <template>
@@ -39,7 +39,7 @@
         <div class="container-fluid md-4">
           <div class="user-profile pull-left" style="column-gap: 20px">
             <img
-              src="../main/webapp/Images/default_img.png"
+              src="../assets/images/default_img.png"
               class="circle"
               style="height: 160px; width: 160px"
               alt="User profile picture"
