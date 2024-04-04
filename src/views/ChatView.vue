@@ -34,38 +34,96 @@
         </div>
       </div>
     </nav>
-    <div v-if="showAll">
-      <!--Put your code here !-->
-      <v-virtual-scroll
-        :items="groups.groups"
-        :item-height="75"
-        max-height="80vh"
-      >
-        <template v-slot:default="{ item }">
-          <v-list-item>
-            <v-list-item-content>
-              <v-btn depressed height="75" class="mr-4" @click="goToChat(item)">
-                {{ item.name.string }}
-              </v-btn>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
-      </v-virtual-scroll>
-    </div>
-    <div class="mt-5" v-else>
-      <nav class="navbar navbar-light bg-light" style="border-radius: 10px">
-        <div class="container-fluid pull-left">
-          <v-btn color="primary" @click="goBack">
-            <i class="fa fa-arrow-left"></i>
-          </v-btn>
-          <div style="width: 100%">
-            <p style="text-align: left">
-              {{ this.currentGroup }}
-            </p>
+    <v-card height="85vh">
+      <v-layout>
+        <v-navigation-drawer floating permanent height="85vh">
+          <v-list nav dense style="overflow: scroll">
+            <h3>Groups</h3>
+            <v-list-item-group
+              v-model="selectedGroupIndex"
+              color="primary"
+              @change="fetchChat"
+            >
+              <v-list-item
+                v-for="item in this.groups.groups"
+                :key="item.groupId.string"
+              >
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-text="item.name.string"
+                  ></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-navigation-drawer>
+        <v-main style="height: 85vh" class="p-3">
+          <div
+            class="container container-fluid"
+            v-if="selectedGroupIndex === undefined"
+            align="center"
+            style="text-align: center"
+          >
+            <strong>Select a group to start chatting! :D</strong>
           </div>
-        </div>
-      </nav>
-    </div>
+          <div v-else>
+            <nav
+              class="navbar navbar-light bg-light"
+              style="border-radius: 10px"
+            >
+              <div class="ml-2">
+                <strong>{{ this.messages.groupName }}</strong>
+              </div>
+            </nav>
+            <div style="position: relative">
+              <v-container fill-height>
+                <v-list nav dense two-line disabled style="overflow: scroll">
+                  <v-list-item-group color="primary">
+                    <v-list-item
+                      v-for="item in this.messages.messages"
+                      :key="item.messageId.string"
+                    >
+                      <v-list-item-content>
+                        <v-list-item-title
+                          v-text="item.sender.string"
+                        ></v-list-item-title>
+                        <v-list-item-subtitle
+                          v-text="item.message.string"
+                        ></v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-container>
+            </div>
+            <div
+              class="row px-2"
+              style="position: absolute; bottom: 0; width: 100%"
+            >
+              <div class="col">
+                <v-form id="send-message" lazy-validation>
+                  <v-text-field
+                    v-model="messages.sendMessage"
+                    label="Send a message"
+                  ></v-text-field>
+                </v-form>
+              </div>
+              <div class="col col-md-auto">
+                <v-btn
+                  class="mt-3"
+                  color="primary"
+                  type="submit"
+                  form="send-message"
+                  @click="sendMessage"
+                >
+                  <i class="fa fa-paper-plane"></i>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-main>
+      </v-layout>
+    </v-card>
   </div>
 </template>
 
@@ -86,8 +144,14 @@ export default {
         { text: "", value: "" },
       ],
     },
-    showAll: true,
-    currentGroup: "",
+    messages: {
+      groupId: "",
+      groupName: "",
+      messages: [],
+      sendMessage: "",
+    },
+    selectedGroupIndex: undefined,
+    timer: null,
   }),
   methods: {
     async logout() {
@@ -109,30 +173,57 @@ export default {
         console.log("There was an error fetching the groups:", error);
       }
     },
-    async goToChat(chatId) {
+    async fetchChat() {
       try {
-        console.log(chatId.groupId.string);
-        console.log(chatId.name.string);
-        let formData = new FormData();
-        formData.append("username", store.state.username);
-        let url = "/user/chat/" + chatId.groupId.string;
-        const response = await Vue.axios.post(url, formData);
-        console.log(response.data.success);
-        console.log(this.groups.groups);
-        this.showAll = false;
-        this.currentGroup = chatId.name.string;
-        console.log(this.showAll);
+        if (this.selectedGroupIndex !== undefined) {
+          console.log(this.selectedGroupIndex);
+          let groupId =
+            this.groups.groups[this.selectedGroupIndex].groupId.string;
+          console.log(groupId);
+          let formData = new FormData();
+          formData.append("username", store.state.username);
+          let url = "/user/chat/" + groupId;
+          console.log(url);
+          const response = await Vue.axios.post(url, formData);
+          console.log(response.data.success);
+          if (response.data.success) {
+            this.messages.messages = response.data.chat;
+            this.messages.groupId = groupId;
+            this.messages.groupName =
+              this.groups.groups[this.selectedGroupIndex].name.string;
+          }
+        }
       } catch (error) {
         console.log("There was an error fetching the groups:", error);
       }
     },
-    async goBack() {
-      this.showAll = true;
-      //await this.fetchGroups();
+    async sendMessage() {
+      let formData = new FormData();
+      let url = "/user/chat/" + this.messages.groupId + "/send";
+      formData.append("username", this.username);
+      formData.append("message", this.messages.sendMessage);
+      let response = await Vue.axios.post(url, formData);
+      if (response.data.success) {
+        // yeehawwww
+        this.messages.sendMessage = "";
+      } else {
+        alert("Failed to send message.");
+      }
+    },
+    refresh() {
+      this.$nextTick(function () {
+        window.setInterval(() => {
+          this.fetchChat();
+        }, 1000);
+      });
     },
   },
   async mounted() {
     await this.fetchGroups();
+    this.refresh();
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
 };
 </script>
