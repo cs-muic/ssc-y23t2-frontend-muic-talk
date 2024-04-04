@@ -39,10 +39,10 @@
         <div class="container-fluid md-4">
           <div class="user-profile pull-left" style="column-gap: 20px">
             <img
-              src="../main/webapp/Images/default_img.png"
-              class="circle"
-              style="height: 160px; width: 160px"
-              alt="User profile picture"
+                src="../main/webapp/Images/default_img.png"
+                class="circle"
+                style="height: 160px; width: 160px"
+                alt="User profile picture"
             />
             <h4>
               <strong>{{ displayName }}</strong> <br />
@@ -57,9 +57,9 @@
             <v-list density="compact" nav>
               <v-list-item>
                 <v-btn
-                  color="primary"
-                  width="100%"
-                  @click="
+                    color="primary"
+                    width="100%"
+                    @click="
                     changePassword.show = false;
                     changeDisplayName.show = true;
                     deleteAccount.show = false;
@@ -70,9 +70,9 @@
               </v-list-item>
               <v-list-item color="primary">
                 <v-btn
-                  color="primary"
-                  width="100%"
-                  @click="
+                    color="primary"
+                    width="100%"
+                    @click="
                     changePassword.show = true;
                     changeDisplayName.show = false;
                     deleteAccount.show = false;
@@ -83,9 +83,9 @@
               </v-list-item>
               <v-list-item>
                 <v-btn
-                  color="error"
-                  width="100%"
-                  @click="
+                    color="error"
+                    width="100%"
+                    @click="
                     changePassword.show = false;
                     changeDisplayName.show = false;
                     deleteAccount.show = true;
@@ -100,29 +100,29 @@
             <v-form ref="form" v-show="changeDisplayName.show" lazy-validation>
               <h4>General Settings</h4>
               <v-text-field
-                v-model="changeDisplayName.newDisplayName"
-                :rules="changeDisplayName.displayNameRules"
-                label="New Display Name"
-                required
+                  v-model="changeDisplayName.newDisplayName"
+                  :rules="changeDisplayName.displayNameRules"
+                  label="New Display Name"
+                  required
               ></v-text-field>
               <v-btn
-                color="primary"
-                class="btn btn-primary"
-                @click="submit_displayName"
+                  color="primary"
+                  class="btn btn-primary"
+                  @click="submit_displayName"
               >
                 <i class="fa fa-save"></i> &nbsp; Save
               </v-btn>
               <div
-                class="alert alert-danger mt-5"
-                role="alert"
-                v-show="changeDisplayName.error"
+                  class="alert alert-danger mt-5"
+                  role="alert"
+                  v-show="changeDisplayName.error"
               >
                 {{ changeDisplayName.message }}
               </div>
               <div
-                class="alert alert-success mt-5"
-                role="alert"
-                v-show="changeDisplayName.success"
+                  class="alert alert-success mt-5"
+                  role="alert"
+                  v-show="changeDisplayName.success"
               >
                 {{ changeDisplayName.message }}
               </div>
@@ -130,37 +130,37 @@
             <v-form ref="form" v-show="changePassword.show" lazy-validation>
               <h4>Change Password</h4>
               <v-text-field
-                type="password"
-                v-model="changePassword.oldPassword"
-                :rules="changePassword.passwordRules"
-                label="Old Password"
-                required
+                  type="password"
+                  v-model="changePassword.oldPassword"
+                  :rules="changePassword.passwordRules"
+                  label="Old Password"
+                  required
               ></v-text-field>
               <v-text-field
-                type="password"
-                v-model="changePassword.newPassword"
-                :rules="changePassword.passwordRules"
-                label="New Password"
-                required
+                  type="password"
+                  v-model="changePassword.newPassword"
+                  :rules="changePassword.passwordRules"
+                  label="New Password"
+                  required
               ></v-text-field>
               <v-btn
-                color="primary"
-                class="btn btn-primary"
-                @click="submit_password"
+                  color="primary"
+                  class="btn btn-primary"
+                  @click="submit_password"
               >
                 <i class="fa fa-save"></i> &nbsp; Save
               </v-btn>
               <div
-                class="alert alert-danger mt-5"
-                role="alert"
-                v-show="changePassword.error"
+                  class="alert alert-danger mt-5"
+                  role="alert"
+                  v-show="changePassword.error"
               >
                 {{ changePassword.message }}
               </div>
               <div
-                class="alert alert-success mt-5"
-                role="alert"
-                v-show="changePassword.success"
+                  class="alert alert-success mt-5"
+                  role="alert"
+                  v-show="changePassword.success"
               >
                 {{ changePassword.message }}
               </div>
@@ -169,22 +169,22 @@
               <h4>Delete Account</h4>
               <strong>This action cannot be undone!</strong>
               <v-text-field
-                v-model="deleteAccount.password"
-                :rules="deleteAccount.passwordRules"
-                label="Confirm Password"
-                required
+                  v-model="deleteAccount.password"
+                  :rules="deleteAccount.passwordRules"
+                  label="Password Type"
+                  required
               ></v-text-field>
               <v-btn
-                color="error"
-                class="btn btn-primary"
-                @click="submit_deleteAccount"
+                  color="error"
+                  class="btn btn-primary"
+                  @click="submit_deleteAccount"
               >
                 <i class="fa fa-trash"></i> &nbsp; Delete
               </v-btn>
               <div
-                class="alert alert-danger mt-5"
-                role="alert"
-                v-show="deleteAccount.error"
+                  class="alert alert-danger mt-5"
+                  role="alert"
+                  v-show="deleteAccount.error"
               >
                 {{ deleteAccount.message }}
               </div>
@@ -192,6 +192,16 @@
           </v-main>
         </v-layout>
       </v-card>
+    </div>
+    <div>
+      <!-- Bye Bye message -->
+      <transition name="fade">
+        <div v-if="showByeBye" class="bye-bye-message-overlay">
+          <div class="bye-bye-message">
+            <h4>BYE BYE</h4>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -230,6 +240,7 @@ export default {
       error: false,
       message: false,
     },
+    showByeBye: false,
   }),
   methods: {
     async logout() {
@@ -288,7 +299,10 @@ export default {
       if (verifyResponse.data.success) {
         let deleteResponse = await Vue.axios.post("/user/delete", formData);
         if (deleteResponse.data.success) {
-          this.$router.push("/login");
+          this.showByeBye = true; // Show "BYE BYE" message
+          setTimeout(() => {
+            this.$router.push("/login");
+          }, 2000); // Redirect to login page after 2 seconds
         } else {
           this.deleteAccount.error = true;
           this.deleteAccount.message = verifyResponse.data.message;
@@ -301,3 +315,36 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* Add new styles for smooth transition */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */
+{
+  opacity: 0;
+}
+
+.bye-bye-message-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+  z-index: 9999; /* Ensure it's above other content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bye-bye-message h4 {
+  font-size: 4rem;
+  color: #550a8a;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+</style>
