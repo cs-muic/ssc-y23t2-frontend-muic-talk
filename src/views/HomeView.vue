@@ -10,17 +10,17 @@
       <div class="container-fluid">
         <a class="navbar-brand"><strong>MUIC Talk</strong></a>
         <div>
-          <router-link to="/">
+          <router-link to="/" class="mr-2">
             <v-btn color="primary">
               <i class="fa fa-home"></i> &nbsp; Home
             </v-btn>
           </router-link>
-          <router-link to="/schedule">
+          <router-link to="/schedule" class="mr-2">
             <v-btn color="primary">
               <i class="fa fa-calendar"></i> &nbsp; Schedule
             </v-btn>
           </router-link>
-          <router-link to="/chat">
+          <router-link to="/chat" class="mr-2">
             <v-btn color="primary">
               <i class="fa fa-comments"></i> &nbsp; Chats
             </v-btn>
@@ -75,6 +75,7 @@
                         color="primary"
                         v-bind="activatorProps"
                         @click="createGroupDialog = true"
+                        class="mr-2"
                       >
                         Create
                       </v-btn>
@@ -237,6 +238,7 @@
                         color="primary"
                         v-bind="activatorProps"
                         @click="friendsModal"
+                        class="mr-2"
                         ><i class="fa fa-plus"></i
                       ></v-btn>
                     </template>
