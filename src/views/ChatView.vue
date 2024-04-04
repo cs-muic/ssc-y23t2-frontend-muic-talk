@@ -37,7 +37,7 @@
     <v-card height="85vh">
       <v-layout>
         <v-navigation-drawer floating permanent height="85vh">
-          <v-list nav dense style="overflow: scroll">
+          <v-list nav dense>
             <h3>Groups</h3>
             <v-list-item-group
               v-model="selectedGroupIndex"
@@ -76,29 +76,40 @@
               </div>
             </nav>
             <div style="position: relative">
-              <v-container fill-height>
-                <v-list nav dense two-line disabled style="overflow: scroll">
-                  <v-list-item-group color="primary">
-                    <v-list-item
-                      v-for="item in this.messages.messages"
-                      :key="item.messageId.string"
-                    >
-                      <v-list-item-content>
-                        <v-list-item-title
-                          v-text="item.sender.string"
-                        ></v-list-item-title>
-                        <v-list-item-subtitle
-                          v-text="item.message.string"
-                        ></v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
-              </v-container>
+              <v-card style="height: 65vh; border-radius: 10px">
+                <v-navigation-drawer
+                  permanent
+                  width="100%"
+                  style="flex-direction: column-reverse"
+                >
+                  <v-list nav dense disabled>
+                    <v-list-item-group color="primary">
+                      <v-list-item
+                        v-for="item in this.messages.messages"
+                        :key="item.messageId.string"
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title
+                            v-text="item.sender.string"
+                          ></v-list-item-title>
+                          <v-list-item-subtitle
+                            v-text="item.message.string"
+                          ></v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-navigation-drawer>
+              </v-card>
             </div>
             <div
               class="row px-2"
-              style="position: absolute; bottom: 0; width: 100%"
+              style="
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                border-radius: 10px;
+              "
             >
               <div class="col">
                 <v-form id="send-message" lazy-validation>
@@ -204,18 +215,15 @@ export default {
       formData.append("message", this.messages.sendMessage);
       let response = await Vue.axios.post(url, formData);
       if (response.data.success) {
-        // yeehawwww
         this.messages.sendMessage = "";
       } else {
         alert("Failed to send message.");
       }
     },
     refresh() {
-      this.$nextTick(function () {
-        window.setInterval(() => {
-          this.fetchChat();
-        }, 1000);
-      });
+      this.timer = setInterval(() => {
+        this.fetchChat();
+      }, 1000);
     },
   },
   async mounted() {
