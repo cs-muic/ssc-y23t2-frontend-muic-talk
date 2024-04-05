@@ -237,7 +237,10 @@ export default {
         let formData = new FormData();
         formData.append("username", this.username);
         formData.append("eventId", eventId);
-        let response = await this.axios.post("/api/user/events/delete", formData);
+        let response = await this.axios.post(
+          "/api/user/events/delete",
+          formData
+        );
         if (response.data.success === false) {
           console.error("Failed to delete event");
         }

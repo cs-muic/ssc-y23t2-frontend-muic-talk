@@ -494,7 +494,10 @@ export default {
     async getFriendReqs() {
       let formData = new FormData();
       formData.append("username", this.username);
-      let response = await Vue.axios.post("/api/user/friends/requests", formData);
+      let response = await Vue.axios.post(
+        "/api/user/friends/requests",
+        formData
+      );
       if (response.data.success && response.data.request) {
         this.addFriends.requests = response.data.friends;
         this.addFriends.requests
