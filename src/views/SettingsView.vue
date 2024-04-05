@@ -254,7 +254,7 @@ export default {
       let formData = new FormData();
       formData.append("username", this.username);
       formData.append("displayName", this.changeDisplayName.newDisplayName);
-      let response = await Vue.axios.post("/user/displayName", formData);
+      let response = await Vue.axios.post("/api/user/displayName", formData);
       if (response.data.success) {
         this.displayName = this.changeDisplayName.newDisplayName;
         store.state.name = this.displayName;
@@ -272,7 +272,7 @@ export default {
       formData.append("username", this.username);
       formData.append("oldPassword", this.changePassword.oldPassword);
       formData.append("newPassword", this.changePassword.newPassword);
-      let response = await Vue.axios.post("/user/password", formData);
+      let response = await Vue.axios.post("/api/user/password", formData);
       if (response.data.success) {
         console.log("yay");
         this.changePassword.oldPassword = "";
@@ -294,11 +294,11 @@ export default {
       formData.append("username", this.username);
       formData.append("password", this.deleteAccount.password);
       let verifyResponse = await Vue.axios.post(
-        "/user/password/verify",
+        "/api/user/password/verify",
         formData
       );
       if (verifyResponse.data.success) {
-        let deleteResponse = await Vue.axios.post("/user/delete", formData);
+        let deleteResponse = await Vue.axios.post("/api/user/delete", formData);
         if (deleteResponse.data.success) {
           this.showByeBye = true; // Show "BYE BYE" message
           setTimeout(() => {

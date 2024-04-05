@@ -445,7 +445,7 @@ export default {
         let formData = new FormData();
         formData.append("username", this.username);
         formData.append("groupId", groupId);
-        await this.axios.post("/user/groups/leave", formData);
+        await this.axios.post("/api/user/groups/leave", formData);
         await this.fetchGroups();
       } catch (error) {
         console.error("Failed to leave group:", error);
@@ -456,7 +456,7 @@ export default {
       try {
         let formData = new FormData();
         formData.append("username", store.state.username);
-        const response = await Vue.axios.post("/user/groups", formData);
+        const response = await Vue.axios.post("/api/user/groups", formData);
         this.groups.groups = response.data.groups;
         this.groups.groups.map(({ groupId }) => groupId.string).join(", ");
         this.groups.groups.map(({ name }) => name.string).join(", ");
@@ -479,7 +479,7 @@ export default {
       let formData = new FormData();
       formData.append("username", this.username);
       formData.append("userToAdd", this.addFriends.toAdd);
-      let response = await Vue.axios.post("/user/friends/add", formData);
+      let response = await Vue.axios.post("/api/user/friends/add", formData);
       if (response.data.success) {
         this.addFriends.toAdd = "";
         this.addFriends.success = true;
@@ -494,7 +494,7 @@ export default {
     async getFriendReqs() {
       let formData = new FormData();
       formData.append("username", this.username);
-      let response = await Vue.axios.post("/user/friends/requests", formData);
+      let response = await Vue.axios.post("/api/user/friends/requests", formData);
       if (response.data.success && response.data.request) {
         this.addFriends.requests = response.data.friends;
         this.addFriends.requests
@@ -508,14 +508,14 @@ export default {
       console.log(toAccept, this.username);
       formData.append("username", this.username);
       formData.append("userToAdd", toAccept);
-      await Vue.axios.post("/user/friends/accept", formData);
+      await Vue.axios.post("/api/user/friends/accept", formData);
       await this.getFriendReqs();
       await this.getFriends();
     },
     async getFriends() {
       let formData = new FormData();
       formData.append("username", store.state.username);
-      let response = await Vue.axios.post("/user/friends", formData);
+      let response = await Vue.axios.post("/api/user/friends", formData);
       if (response.data.success) {
         this.friends.friends = response.data.friends;
         this.friends.friends.map(({ username }) => username.string).join(", ");
@@ -526,7 +526,7 @@ export default {
       let formData = new FormData();
       formData.append("username", this.username);
       formData.append("userToDelete", toDelete);
-      await Vue.axios.post("/user/friends/remove", formData);
+      await Vue.axios.post("/api/user/friends/remove", formData);
       await this.getFriendReqs();
       await this.getFriends();
       alert("Successfully deleted friend " + toDelete);
@@ -537,7 +537,7 @@ export default {
         formData.append("username", this.username);
         formData.append("name", this.newGroupName);
         // Assume you have a function to call your API to create the group
-        await this.axios.post("/user/groups/create", formData);
+        await this.axios.post("/api/user/groups/create", formData);
         this.createGroupDialog = false; // Close the dialog
         this.newGroupName = ""; // Reset input
         await this.fetchGroups();
@@ -551,7 +551,7 @@ export default {
       console.log(this.invite.group);
       formData.append("toInvite", this.invite.user);
       formData.append("groupId", this.invite.group);
-      let response = await this.axios.post("/user/groups/invite", formData);
+      let response = await this.axios.post("/api/user/groups/invite", formData);
       if (!response.data.success) {
         console.error("Failed to invite ", this.invite.user, " to group");
         alert("Failed to invite ", this.invite.user, " to group");

@@ -167,7 +167,7 @@ export default {
         formData.append("username", this.username);
         formData.append("displayName", this.displayName);
         formData.append("password", this.password.password);
-        let response = await Vue.axios.post("/user/create", formData);
+        let response = await Vue.axios.post("/api/user/create", formData);
         if (response.data.success) {
           this.signUpError.show = false;
           this.signUpError.message = "";

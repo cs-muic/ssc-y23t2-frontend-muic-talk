@@ -204,7 +204,7 @@ export default {
         formData.append("eventName", this.newEvent.name);
         formData.append("eventDate", this.newEvent.date);
         formData.append("eventTime", this.newEvent.time);
-        let response = await this.axios.post("/user/events/new", formData);
+        let response = await this.axios.post("/api/user/events/new", formData);
         if (response.data.success) {
           this.newEvent.name = "";
           this.newEvent.date = "";
@@ -219,7 +219,7 @@ export default {
       try {
         let formData = new FormData();
         formData.append("username", this.username);
-        let response = await this.axios.post("/user/events", formData);
+        let response = await this.axios.post("/api/user/events", formData);
         if (response.data.success) {
           console.log(response.data.events);
           this.events = response.data.events;
@@ -237,7 +237,7 @@ export default {
         let formData = new FormData();
         formData.append("username", this.username);
         formData.append("eventId", eventId);
-        let response = await this.axios.post("/user/events/delete", formData);
+        let response = await this.axios.post("/api/user/events/delete", formData);
         if (response.data.success === false) {
           console.error("Failed to delete event");
         }

@@ -174,7 +174,7 @@ export default {
       try {
         let formData = new FormData();
         formData.append("username", store.state.username);
-        const response = await Vue.axios.post("/user/groups", formData);
+        const response = await Vue.axios.post("/api/user/groups", formData);
         this.groups.groups = response.data.groups;
         this.groups.groups.map(({ groupId }) => groupId.string).join(", ");
         this.groups.groups.map(({ name }) => name.string).join(", ");
@@ -192,7 +192,7 @@ export default {
           console.log(groupId);
           let formData = new FormData();
           formData.append("username", store.state.username);
-          let url = "/user/chat/" + groupId;
+          let url = "/api/user/chat/" + groupId;
           console.log(url);
           const response = await Vue.axios.post(url, formData);
           console.log(response.data.success);
@@ -209,7 +209,7 @@ export default {
     },
     async sendMessage() {
       let formData = new FormData();
-      let url = "/user/chat/" + this.messages.groupId + "/send";
+      let url = "/api/user/chat/" + this.messages.groupId + "/send";
       formData.append("username", this.username);
       formData.append("message", this.messages.sendMessage);
       let response = await Vue.axios.post(url, formData);
